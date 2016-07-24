@@ -1,0 +1,27 @@
+#WIMOVAC ConstantsFile_canopy
+#Thu Nov 20 11:37:44 CST 2014
+Atmospheric_Pressure=101
+Atmospheric_Transmittance=0.85
+FracSkyCoveredClouds=0.3
+TimeSolarNoon=13
+WindSpeedAboveCanopy=2
+WindSpeedRoughnessLength=0.13
+WindSpeedHeight=2
+WindSpeedHeightCoeff=0.77
+ZetaRoughnessCoef=0.026
+ZetaMRoughnessCoef=0.13
+SinkMomentum=0.77
+CanopyHeight=0.5
+LeafWidth=0.04
+TranspirationUnitsFlag=0
+CanopyCalcultion=1
+ExtinctionCalcSwitch=0
+LeafAreaIndex=3
+HorizVerticalProjAreaRatio=1
+CanopyExtinctionCoef=0.8
+AnnMeanAirTemperature=10
+AmplitudeAnnualTemperatureChange=15
+AmplitudeDailyTemperatureChange=6
+MaximumDailyTemperatureChange=10
+StartDayTemperatureCycle=120
+TemperaturePeakHour=14
