@@ -41,7 +41,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
         Border loweredbevel=BorderFactory.createLoweredBevelBorder();
         Border raisedbevel=BorderFactory.createRaisedBevelBorder();
         
-        JLabel title=new JLabel("Tobacco Model");
+        JLabel title=new JLabel("WIMOVAC");
         title.setFont(f1);
         
         JPanel north=new JPanel();
@@ -117,7 +117,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
                 UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception e) { }
 
-        JFrame frame = new JFrame("Tobacco Model Launcher");
+        JFrame frame = new JFrame("WIMOVAC Module Launcher");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create and set up the content pane.
@@ -134,19 +134,19 @@ public class WIMOVAC extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
            if (r1.isSelected()) {
-               LeafAssimilation  leafassimilation=new LeafAssimilation();
+               LeafAssimilationTestArea  leafassimilation=new LeafAssimilationTestArea();
                leafassimilation.createAndShowGUI();
            }
            else if (r2.isSelected()) {
-               CanopyMicroclimate  canopymicro=new CanopyMicroclimate();
+               CanopyMicroclimateTestArea  canopymicro=new CanopyMicroclimateTestArea();
                canopymicro.createAndShowGUI();
            }
            else if (r4.isSelected()) {
-               CanopyAssimilation  canopyassimilation=new CanopyAssimilation();
+               CanopyAssimilationTestArea  canopyassimilation=new CanopyAssimilationTestArea();
                canopyassimilation.createAndShowGUI();
            }
            else if (r3.isSelected()) {
-               PlantGrowth  plantgrowth=new PlantGrowth();
+               PlantGrowthTestArea  plantgrowth=new PlantGrowthTestArea();
                plantgrowth.createAndShowGUI();
            }          
     }
@@ -155,7 +155,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
         
         try {
            constants = new Properties();
-           File f = new File("ParameterFile\\ConstantsFile.csv"); 
+           File f = new File("ParameterFile\\WIMOVAC_ConstantsFile.csv"); 
            FileInputStream fid = new FileInputStream(f); 
            constants.load(fid);               
         } 

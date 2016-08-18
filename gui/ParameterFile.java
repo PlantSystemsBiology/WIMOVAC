@@ -50,16 +50,16 @@ public class ParameterFile extends JPanel implements ActionListener{
     /**
 	 * 
 	 */
-	private static final String const_file_all = "ParameterFile\\ConstantsFile.csv";
+	private static final String const_file_all = "ParameterFile\\WIMOVAC_ConstantsFile.csv";
 	
-	private static final String const_file_leaf = "ParameterFile\\ConstantsFile_leaf.csv";
-	private static final String update_file_leaf = "ParameterFile\\UPDATE_ConstantsFile_leaf.csv";
+	private static final String const_file_leaf = "ParameterFile\\WIMOVAC_ConstantsFile_leaf.csv";
+	private static final String update_file_leaf = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_leaf.csv";
 	
-	private static final String const_file_canopy = "ParameterFile\\ConstantsFile_canopy.csv";
-	private static final String update_file_canopy = "ParameterFile\\UPDATE_ConstantsFile_canopy.csv";
+	private static final String const_file_canopy = "ParameterFile\\WIMOVAC_ConstantsFile_canopy.csv";
+	private static final String update_file_canopy = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_canopy.csv";
 	
-	private static final String const_file_plant ="ParameterFile\\ConstantsFile_plant.csv";
-	private static final String update_file_plant ="ParameterFile\\UPDATE_ConstantsFile_plant.csv";
+	private static final String const_file_plant ="ParameterFile\\WIMOVAC_ConstantsFile_plant.csv";
+	private static final String update_file_plant ="ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_plant.csv";
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -484,7 +484,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                        try{
                             File f3 = new File(update_file_leaf); 
                             FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "ConstantsFile_leaf");  
+                            d.store(fid3, "WMOVAC ConstantsFile_leaf");  
                         }
                         catch (IOException o) { 
                             // catch io errors from FileOutputStream 
@@ -497,7 +497,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                        try{
                             File f3 = new File(update_file_canopy); 
                             FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "ConstantsFile_canopy");  
+                            d.store(fid3, "WIMOVAC ConstantsFile_canopy");  
                         }
                         catch (IOException o) { 
                             // catch io errors from FileOutputStream 
@@ -510,7 +510,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                        try{
                             File f3 = new File(update_file_plant); 
                             FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "ConstantsFile_plant");  
+                            d.store(fid3, "WIMOVAC ConstantsFile_plant");  
                         }
                         catch (IOException o) { 
                             // catch io errors from FileOutputStream 
@@ -673,7 +673,6 @@ public class ParameterFile extends JPanel implements ActionListener{
                      }
                      
                      //QF
-                     System.out.println("QFQF:"+parameterfile.size());
                      for (int t=0; t<parameterfile.size(); t++){
                     	 if (index == 1)
                     		 tf.tfHorizontal[t].setText(parameterfile.getProperty(Leafparameters.get(t)));

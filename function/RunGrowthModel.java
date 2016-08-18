@@ -62,8 +62,8 @@ public class RunGrowthModel {
         	gr.xys_OzoneConcentration 				.add(d,env.air.O3);
         	gr.xys_DirectSunLight 				.add(d,env.light.direct_PPFD);
         	gr.xys_DiffuseSunLight 				.add(d,env.light.diffuse_PPFD);
-        	gr.xys_TotalRadiation 				.add(d,env.light.total_radiation);
-        	gr.xys_DayRadiation 				.add(d,env.light.total_radiation); // ??? check; total radiation... 
+        //	gr.xys_TotalRadiation 				.add(d,env.light.total_radiation);
+        //	gr.xys_DayRadiation 				.add(d,env.light.total_radiation); // ??? check; total radiation... 
         	gr.xys_RainFall 				    .add(d,env.rain_fall);
         	
         	cumulativeRainFall += env.rain_fall;

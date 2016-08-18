@@ -73,7 +73,7 @@ public class CreateConstantsFile {
            c.setProperty("Leaf_C4CurvatureParam1","0.83");
            c.setProperty("Leaf_C4CurvatureParam2","0.93");
            
-           File f1 = new File("ConstantsFile_leaf.csv"); 
+           File f1 = new File("WIMOVAC_ConstantsFile_leaf.csv"); 
            FileOutputStream fid1 = new FileOutputStream(f1);   
            c.store(fid1, "WIMOVAC ConstantsFile_leaf");  
 

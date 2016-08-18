@@ -19,7 +19,7 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class Graph extends JFrame {
      
         public Graph(XYSeriesCollection c,String title,String unit1,String unit2) {
-            super("Model Simulation - Graph Module");
+            super("WIMOVAC Simulation - Graph Module");
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                       
             final JFreeChart chart = ChartFactory.createXYLineChart(title,unit1,unit2,c,PlotOrientation.VERTICAL,
