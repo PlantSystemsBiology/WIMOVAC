@@ -219,7 +219,7 @@ public class CanopyAssimilationTestArea extends JPanel implements ActionListener
         
         try {
              PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_CanopyAssimilation.csv")),true);              
-              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Average stomtal conductance (mol.m-2.s-1)");
+              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Average stomatal conductance (mol.m-2.s-1)");
              int number=mcr.xys_Ac.getItemCount();
              for (int i=0; i<number; i++){
                   double avggs = mcr.xys_conductance.getY(i).doubleValue()/1000;
