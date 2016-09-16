@@ -58,7 +58,7 @@ public class CanopyAssimilationTestArea extends JPanel implements ActionListener
                      //    "Shaded leaves nitrogen content (g/m2)", 
                          "LAI of shaded leaves (m2 leaf.m-2)",
                          "LAI of sunlit leaves (m2 leaf.m-2)", 
-                         "Conductance (mmol H2O.m-2.s-1)"};     
+                         "Average stomatal conductance (mol H2O.m-2.s-1)"};     
         cb =new CheckBoxGroup(6,title2);
         north.add(cb.createCheckBoxGroup());
         cb.setDefault(0);
@@ -210,7 +210,7 @@ public class CanopyAssimilationTestArea extends JPanel implements ActionListener
       	
       	if(cb.cb[5].isSelected()){
       		c4.addSeries(mcr.xys_conductance);
-      		JFrame result = new Graph(c4,"Sunlit/shaded Canopy Assimilation Module","Time (hours)","Conductance (mmol.m-2.s-1)");
+      		JFrame result = new Graph(c4,"Sunlit/shaded Canopy Assimilation Module","Time (hours)","Average stomatal conductance (mol.m-2.s-1)");
             result.setSize(400, 400);
             result.setVisible(true);
       	}
@@ -219,11 +219,11 @@ public class CanopyAssimilationTestArea extends JPanel implements ActionListener
         
         try {
              PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_CanopyAssimilation.csv")),true);              
-              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Conductance (mmol.m-2.s-1)");
+              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Average stomtal conductance (mol.m-2.s-1)");
              int number=mcr.xys_Ac.getItemCount();
              for (int i=0; i<number; i++){
-                
-                  pw1.println(mcr.xys_Ac.getX(i)+","+mcr.xys_Ac.getY(i)+","+mcr.xys_Ac_shaded.getY(i)+","+mcr.xys_Ac_sunlit.getY(i)+","+mcr.xys_LAI_sunlit.getY(i)+","+mcr.xys_LAI_shaded.getY(i)+","+mcr.xys_conductance.getY(i));
+                  double avggs = mcr.xys_conductance.getY(i).doubleValue()/1000;
+                  pw1.println(mcr.xys_Ac.getX(i)+","+mcr.xys_Ac.getY(i)+","+mcr.xys_Ac_shaded.getY(i)+","+mcr.xys_Ac_sunlit.getY(i)+","+mcr.xys_LAI_sunlit.getY(i)+","+mcr.xys_LAI_shaded.getY(i)+","+avggs);
              }
              
              

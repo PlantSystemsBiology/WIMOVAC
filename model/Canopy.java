@@ -226,7 +226,7 @@ public class Canopy extends CanopyProperties{
 	    sunlit_leaf.calSunShadeCO2UptakeRate(env);
 	    shaded_leaf.calSunShadeCO2UptakeRate(env);
 		
-		cond 			= sunlit_leaf.cond 				+ shaded_leaf.cond;
+		cond 			= (sunlit_leaf.cond * sunlit_leaf.LAI + shaded_leaf.cond * shaded_leaf.LAI)/(sunlit_leaf.LAI + shaded_leaf.LAI);
 	    CO2_uptake_rate = sunlit_leaf.CO2_uptake_rate 	+ shaded_leaf.CO2_uptake_rate;
 	}
 	private void calcCanopyTranspiration(Environment env) {
