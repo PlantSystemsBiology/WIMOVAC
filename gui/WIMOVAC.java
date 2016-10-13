@@ -16,7 +16,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.BorderFactory; 
 import javax.swing.GroupLayout;
-
+ 
 public class WIMOVAC extends JPanel implements ActionListener {
     
     public  static Properties constants;
