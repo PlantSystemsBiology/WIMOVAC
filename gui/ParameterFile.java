@@ -53,22 +53,22 @@ public class ParameterFile extends JPanel implements ActionListener{
 	 */
 	private String parameterFileName = ""; // for the new Dialog Save Function. 
 	
-	private static final String const_file_all = "ParameterFile\\WIMOVAC_ConstantsFile.csv";
+//	private static final String const_file_all = "ParameterFile\\WIMOVAC_ConstantsFile.csv";
 	
-	private static final String const_file_leaf = "ParameterFile\\WIMOVAC_ConstantsFile_leaf.csv";
-	private static final String update_file_leaf = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_leaf.csv";
+//	private static final String const_file_leaf = "ParameterFile\\WIMOVAC_ConstantsFile_leaf.csv";
+//	private static final String update_file_leaf = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_leaf.csv";
 	
-	private static final String const_file_canopy = "ParameterFile\\WIMOVAC_ConstantsFile_canopy.csv";
-	private static final String update_file_canopy = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_canopy.csv";
+//	private static final String const_file_canopy = "ParameterFile\\WIMOVAC_ConstantsFile_canopy.csv";
+//	private static final String update_file_canopy = "ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_canopy.csv";
 	
-	private static final String const_file_plant ="ParameterFile\\WIMOVAC_ConstantsFile_plant.csv";
-	private static final String update_file_plant ="ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_plant.csv";
+//	private static final String const_file_plant ="ParameterFile\\WIMOVAC_ConstantsFile_plant.csv";
+//	private static final String update_file_plant ="ParameterFile\\UPDATE_WIMOVAC_ConstantsFile_plant.csv";
 	
 	
 	private static final long serialVersionUID = 1L;
 	private int index, p;  
     private LabelTextfieldGroup tf, tf_2;
-    public static Properties parameterfile, parameterfile_2;
+//    public static Properties parameterfile, parameterfile_2;
     private String[] parametername,updated;
     private double[] parametervalue;
     private JPanel center;
@@ -112,22 +112,22 @@ public class ParameterFile extends JPanel implements ActionListener{
         
         JScrollPane scrollable = new JScrollPane(center);
    
-        JButton save=new JButton("   Save   ");
+        JButton save=new JButton("   Apply   ");
         save.setFont(f2);
         save.setBorder(raisedbevel);
         save.addActionListener(this);
         
-        JButton newsave=new JButton("Load Saved Data");
-        newsave.setFont(f2);
-        newsave.setBorder(raisedbevel);
-        newsave.addActionListener(this);
-        
+        JButton ok=new JButton("  OK  ");
+        ok.setFont(f2);
+        ok.setBorder(raisedbevel);
+        ok.addActionListener(this);
+/*        
         JButton original=new JButton("Load Original Data");
         original.setFont(f2);
         original.setBorder(raisedbevel);
-        original.addActionListener(this);
+        original.addActionListener(this);*/
         
-        try {
+   /*     try {
             parameterfile = new Properties();
             if(index==1)  {  f = new File(const_file_all);} 
             if(index==2)  {  f = new File(const_file_canopy);} 
@@ -139,7 +139,7 @@ public class ParameterFile extends JPanel implements ActionListener{
         catch (IOException e) { 
            // catch io errors from FileInputStream 
            System.out.println("Uh oh, got an IOException error!" + e.getMessage()); 
-        }
+        }*/
        
         if (index == 1){
         // QF set the classification of all leaf parameters. 
@@ -204,9 +204,9 @@ public class ParameterFile extends JPanel implements ActionListener{
 		p = 0;
 		
 		for (int t=0;t<Leafparameters.size();t++){
-			Leafparameters_v.add( Double.valueOf(parameterfile.getProperty(Leafparameters.get(t)) ));
+		//	Leafparameters_v.add( Double.valueOf(parameterfile.getProperty(Leafparameters.get(t)) ));
 			parametername[p] = Leafparameters.get(t);
-			parametervalue[p] = Double.valueOf(parameterfile.getProperty(Leafparameters.get(t)));
+		//	parametervalue[p] = Double.valueOf(parameterfile.getProperty(Leafparameters.get(t)));
 			p++;
 		}
 		
@@ -258,9 +258,9 @@ public class ParameterFile extends JPanel implements ActionListener{
 			p = 0;
 			
 			for (int t=0;t<CanopyLevelparameters.size();t++){
-				CanopyLevelparameters_v.add( Double.valueOf(parameterfile.getProperty(CanopyLevelparameters.get(t)) ));
+		//		CanopyLevelparameters_v.add( Double.valueOf(parameterfile.getProperty(CanopyLevelparameters.get(t)) ));
 				parametername[p] = CanopyLevelparameters.get(t);
-				parametervalue[p] = Double.valueOf(parameterfile.getProperty(CanopyLevelparameters.get(t)));
+		//		parametervalue[p] = Double.valueOf(parameterfile.getProperty(CanopyLevelparameters.get(t)));
 				p++;
 			}			
 		}
@@ -419,9 +419,9 @@ public class ParameterFile extends JPanel implements ActionListener{
 			p = 0;
 			
 			for (int t=0;t<PlantLevelparameters.size();t++){
-				PlantLevelparameters_v.add( Double.valueOf(parameterfile.getProperty(PlantLevelparameters.get(t)) ));
+		//		PlantLevelparameters_v.add( Double.valueOf(parameterfile.getProperty(PlantLevelparameters.get(t)) ));
 				parametername[p] = PlantLevelparameters.get(t);
-				parametervalue[p] = Double.valueOf(parameterfile.getProperty(PlantLevelparameters.get(t)));
+		//		parametervalue[p] = Double.valueOf(parameterfile.getProperty(PlantLevelparameters.get(t)));
 				p++;
 			}	
 			
@@ -440,7 +440,7 @@ public class ParameterFile extends JPanel implements ActionListener{
         
         tf=new LabelTextfieldGroup(p,parametername,parametervalue);
         center.add(tf.createHorizontalLabelTextfieldGroup()); 
-          
+
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setAutoCreateGaps(true);
@@ -453,8 +453,8 @@ public class ParameterFile extends JPanel implements ActionListener{
                 )
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(save)
-                    .addComponent(newsave)
-                    .addComponent(original)
+                    .addComponent(ok)
+               //     .addComponent(original)
                 )
         );
         
@@ -465,52 +465,50 @@ public class ParameterFile extends JPanel implements ActionListener{
                 )
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(save)
-                    .addComponent(newsave)
-                    .addComponent(original)
+                    .addComponent(ok)
+             //       .addComponent(original)
                 )
          );
+        
+        // for (int t=0; t<parameterfile.size(); t++){
+      	 if (index == 1)
+      		 for (int t=0; t<tf.tfHorizontal.length; t++)
+      		 tf.tfHorizontal[t].setText(WIMOVAC.constants.getProperty(Leafparameters.get(t)));
+      	 if (index == 2)
+      		 for (int t=0; t<tf.tfHorizontal.length; t++)
+      		 tf.tfHorizontal[t].setText(WIMOVAC.constants.getProperty(CanopyLevelparameters.get(t)));
+      	 if (index == 3)
+      		 for (int t=0; t<tf.tfHorizontal.length; t++)
+      		 tf.tfHorizontal[t].setText(WIMOVAC.constants.getProperty(PlantLevelparameters.get(t)));
+      //   }
     }   
     
     public void actionPerformed(ActionEvent e) {
         
            String text = (String)e.getActionCommand();
-           if (text.equals("   Save   ")) {      
+           if (text.equals("   Apply   ")) {    // Use this As Apply.   
         	   
+        	   // Apply Update Parameters Directly to WIMOVAC constants
         	   
-
                    for (int i=0; i<p; i++) 
                         updated[i] = tf.tfHorizontal[i].getText();
-                   //System.out.println( "GET_TEXTFIELD_VALUE=======================");
-                   //System.out.println(Arrays.toString(updated)); 
-                   Properties d=new Properties();
+
                    for (int i=0; i<p; i++)        
-                      d.setProperty(parametername[i],updated[i]);         
-                   
-                 //QF 2016-10-13
-            	   
-            	   //SAVE to a user choose file. 
-            	   
-            	   final JFileChooser fc = new JFileChooser();
-            	   
-            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            		        ".csv", "csv");
-            	   fc.setFileFilter(filter);
-            	   int returnVal = fc.showSaveDialog(getParent());
-            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
-            	       System.out.println("You chose to open this file: " +
-            	            fc.getSelectedFile().getAbsoluteFile());
-            	       
-            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
-            	       if(!Absolutefilename.endsWith(".csv")){
-            	    	   Absolutefilename = Absolutefilename.concat(".csv");
-            	    	   
-            	       }
-            	       parameterFileName = Absolutefilename; // update the parameterFileName. 
-            	    }
-            	 //QF
-            	   
+                	   WIMOVAC.constants.setProperty(parametername[i],updated[i]);   
+           }
+           if (text.equals("  OK  ")) {    // Use this As Apply.   
+        	   center.setVisible(false);
+        	   return;
+        	   
+           }
+    }
                    
                    
+                   
+                 
+            	   
+                   
+                   /*
                    if(index==1)  {  
                        try{
                             File f3 = new File(update_file_leaf); 
@@ -549,10 +547,10 @@ public class ParameterFile extends JPanel implements ActionListener{
                             System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
                         }
                    
-                    }      
+                    }      */
                    
                    // after Save, automatic load the saved value. 
-
+/*
                    String file1,file2,file3;
                    if (Constants.leafFile=="original") 
                        file1=const_file_leaf;
@@ -600,8 +598,8 @@ public class ParameterFile extends JPanel implements ActionListener{
                        // catch io errors from FileInputStream 
                        System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
                     }
-               } 
-               
+               } */
+               /*
                if (text.equals("Load Saved Data")) { 
                    try {
                        parameterfile = new Properties();
@@ -695,41 +693,24 @@ public class ParameterFile extends JPanel implements ActionListener{
                           
                      
                 }
+               */
                
-               if (text.equals("Load Original Data")) { 
+               // change this to OPEN
+     /*          if (text.equals("Load Original Data")) { 
             	   
             	   
-            	   //QF 2016-10-13
-            	   
-            	   //OPEN to a user choose file. 
-            	   
-            	   final JFileChooser fc = new JFileChooser();
-            	   
-            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            		        ".csv", "csv");
-            	   fc.setFileFilter(filter);
-            	   int returnVal = fc.showOpenDialog(getParent());
-            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
-            	       System.out.println("You chose to open this file: " +
-            	            fc.getSelectedFile().getAbsoluteFile());
-            	       
-            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
-            	       
-            	       parameterFileName = Absolutefilename; // update the parameterFileName. 
-            	    }
-            	 //QF
             	   
             	   
                      try {
-                       parameterfile = new Properties();
-                       if(index==1)  {  f = new File(const_file_leaf);  Constants.leafFile="original";} 
-                       if(index==2)  {  f = new File(const_file_canopy);Constants.canopyFile="original";} 
-                       if(index==3)  {  f = new File(const_file_plant); Constants.plantFile="original";} 
+            //           parameterfile = new Properties();
+            //           if(index==1)  {  f = new File(const_file_leaf);  Constants.leafFile="original";} 
+            //           if(index==2)  {  f = new File(const_file_canopy);Constants.canopyFile="original";} 
+            //           if(index==3)  {  f = new File(const_file_plant); Constants.plantFile="original";} 
                        
                        f = new File(parameterFileName); 
                        
                        FileInputStream fid = new FileInputStream(f);
-                       parameterfile.load(fid); // load all parameters 
+                       WIMOVAC.constants.load(fid); // load all parameters 
                     }
                     catch (IOException o) { 
                         // catch io errors from FileInputStream 
@@ -747,7 +728,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                     	 if (index == 3)
                     		 for (int t=0; t<tf.tfHorizontal.length; t++)
                     		 tf.tfHorizontal[t].setText(parameterfile.getProperty(PlantLevelparameters.get(t)));
-                    // }
+         */           // }
                      
                    //  Enumeration em = parameterfile.keys();
 //                     int p2=0;
@@ -756,7 +737,7 @@ public class ParameterFile extends JPanel implements ActionListener{
 //                         tf.tfHorizontal[p2].setText(parameterfile.getProperty(parametername[p2]));
 //                         p2++;
 //                     }  
-                     String file1,file2,file3;
+             /*        String file1,file2,file3;
                     if (Constants.leafFile=="original") 
                         file1=const_file_leaf;
                     else file1=update_file_leaf;
@@ -770,7 +751,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                      FileInputStream in1 = null;
                      FileInputStream in2 = null;
                      FileInputStream in3 = null;
-                     FileOutputStream out = null;
+                     FileOutputStream out= null;
                      try {
                            int i1,i2,i3;
                            in1 = new FileInputStream(file1);
@@ -787,6 +768,7 @@ public class ParameterFile extends JPanel implements ActionListener{
                            while ((i3 = in3.read()) != -1){
                               out.write(i3);
                            }
+                           
                       }
                       
                      catch (IOException o) { 
@@ -802,10 +784,10 @@ public class ParameterFile extends JPanel implements ActionListener{
                      catch (IOException o) { 
                           // catch io errors from FileInputStream 
                          System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                      }                  
+                      }                  */
                      
-               }           
-    }
+//               }           
+//    }
           
     
         
