@@ -268,7 +268,11 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
               Constants.C3orC4="C3";
            }
            if (text.equals("   Start   ")) {
-              calculation();
+        	   if (isAllFilled()){ 
+        		   calculation();
+        	   }else{
+        		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");
+        	   }
            }
            if (text.equals("Save Results")) {
 
@@ -347,5 +351,11 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
     	FileOutputStream fs = new FileOutputStream(f3);
         Files.copy(Paths.get(sourcePath), fs);
         fs.close();
+    }
+    private boolean isAllFilled(){
+    	if (WIMOVAC.constants.isEmpty())
+    		return false;
+    	else
+    		return true;
     }
 }

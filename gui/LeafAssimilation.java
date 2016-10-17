@@ -644,25 +644,32 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
               
            }
            if ( text.equals("   Start   ")) {
-               if(radio1.isSelected(0)){
-                   if(radio3.isSelected(1))
-                        calculationLight_CO2loop();  
-                   else if(radio3.isSelected(2))
-                        calculationLight_Temloop(); 
-               }
-               if(radio1.isSelected(1)){
-                   if(radio3.isSelected(0))       
-                        calculationCO2_Lightloop(); 
-                   else if(radio3.isSelected(2))
-                        calculationCO2_Temloop(); 
-               }
-               if(radio1.isSelected(2)){
-                   if(radio3.isSelected(0)) {
-                        calculationTem_Lightloop();  
+        	   
+        	   if (isAllFilled()){
+        		   if(radio1.isSelected(0)){
+                       if(radio3.isSelected(1))
+                            calculationLight_CO2loop();  
+                       else if(radio3.isSelected(2))
+                            calculationLight_Temloop(); 
                    }
-                    else if(radio3.isSelected(1))
-                        calculationTem_CO2loop(); 
-               }
+                   if(radio1.isSelected(1)){
+                       if(radio3.isSelected(0))       
+                            calculationCO2_Lightloop(); 
+                       else if(radio3.isSelected(2))
+                            calculationCO2_Temloop(); 
+                   }
+                   if(radio1.isSelected(2)){
+                       if(radio3.isSelected(0)) {
+                            calculationTem_Lightloop();  
+                       }
+                        else if(radio3.isSelected(1))
+                            calculationTem_CO2loop(); 
+                   }
+        	   }else{
+        		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");
+        	   }
+        		   
+               
            } 
            
 
@@ -840,6 +847,14 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
     	FileOutputStream fs = new FileOutputStream(f3);
         Files.copy(Paths.get(sourcePath), fs);
         fs.close();
+    }
+    
+
+    private boolean isAllFilled(){
+    	if (WIMOVAC.constants.isEmpty())
+    		return false;
+    	else
+    		return true;
     }
     
     
