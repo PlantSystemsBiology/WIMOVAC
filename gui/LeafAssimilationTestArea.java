@@ -11,21 +11,25 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.jfree.data.xy.XYSeriesCollection;
 import function.*;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import model.*;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.OutputStreamWriter;
 
 public class LeafAssimilationTestArea extends JPanel implements ActionListener, ItemListener {
        
     private static final long serialVersionUID = 1L;
 
-    private JButton C3,start,parameterfile;
+    private JButton C3,start,saveR,parameterfile;
 
     private LabelTextfieldGroup tf1, tf2, tf3;
     
@@ -114,6 +118,11 @@ public class LeafAssimilationTestArea extends JPanel implements ActionListener, 
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -132,6 +141,7 @@ public class LeafAssimilationTestArea extends JPanel implements ActionListener, 
                 .addGroup(layout.createSequentialGroup()    
                     .addComponent(C3)
                     .addComponent(start)  
+                    .addComponent(saveR)
                     .addComponent(parameterfile)               
                 )
         );
@@ -144,6 +154,7 @@ public class LeafAssimilationTestArea extends JPanel implements ActionListener, 
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                   .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                   .addComponent(parameterfile) 
                 )
          );        
@@ -652,6 +663,45 @@ public class LeafAssimilationTestArea extends JPanel implements ActionListener, 
                         calculationTem_CO2loop(); 
                }
            } 
+           
+
+           if (text.equals("Save Results")) {
+
+
+        	 //SAVE to a user choose file. 
+    	    	final JFileChooser fc;
+    	    	if(WIMOVAC.WorkingDirOpened){
+    	    		fc = new JFileChooser(WIMOVAC.OpenedWorkingDir);
+    	    	}else{
+    	    		fc = new JFileChooser();
+    	    	}
+
+          	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          		        ".csv", "csv");
+          	   fc.setFileFilter(filter);
+          	   int returnVal = fc.showSaveDialog(getParent());
+          	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+          	       System.out.println("You chose to open this file: " +
+          	            fc.getSelectedFile().getAbsoluteFile());
+          	       
+          	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+          	       if(!Absolutefilename.endsWith(".csv")){
+          	    	   Absolutefilename = Absolutefilename.concat(".csv");
+          	    	   
+          	       }
+          	     try {
+					copy("WIMOVAC_OutputFile_Leaf.csv",Absolutefilename);
+				} catch (IOException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
+
+          	    }
+        	   
+           }
+           
+           // QIngfeng add
+           
            if (text.equals("Light_0 (umol.m-2.s-1)") ) {
         	   
                radio3.disable(0);
@@ -782,6 +832,13 @@ public class LeafAssimilationTestArea extends JPanel implements ActionListener, 
         frame.setSize(500,550);
         frame.setVisible(true);
     }
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
+    
     
     
      

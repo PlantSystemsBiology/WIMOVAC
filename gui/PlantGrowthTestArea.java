@@ -12,25 +12,26 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.JTabbedPane;
-import javax.swing.GroupLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.data.xy.XYSeriesCollection;
 
 import function.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import model.*;
 
 public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemListener {
        
     private LabelTextfieldGroup tf1;
-    private JButton weather,C3,Start,Stop,parameterfile;
+    private JButton weather,C3,Start,Stop,saveR,parameterfile;
     private RadioButtonGroup rbg1;
     private CheckBoxGroup cb1,cb2,cb3,cb4,cb5;
 
@@ -188,6 +189,12 @@ public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemL
         Stop.setBorder(raisedbevel);
         Stop.addActionListener(this);
         
+
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+        
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -206,6 +213,7 @@ public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemL
                     .addComponent(C3)
                     .addComponent(Start)
                     .addComponent(Stop)  
+                    .addComponent(saveR)
                     .addComponent(parameterfile)
                 )
         );
@@ -218,6 +226,7 @@ public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemL
                  .addComponent(C3)
                  .addComponent(Start)
                  .addComponent(Stop)
+                 .addComponent(saveR)
                  .addComponent(parameterfile)
                 )
          );        
@@ -505,6 +514,43 @@ public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemL
            if (text.equals("   Start   ")) {
               calculation();
            }   
+           if (text.equals("Save Results")) {
+
+
+          	 //SAVE to a user choose file. 
+      	    	final JFileChooser fc;
+      	    	if(WIMOVAC.WorkingDirOpened){
+      	    		fc = new JFileChooser(WIMOVAC.OpenedWorkingDir);
+      	    	}else{
+      	    		fc = new JFileChooser();
+      	    	}
+
+            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            		        ".csv", "csv");
+            	   fc.setFileFilter(filter);
+            	   int returnVal = fc.showSaveDialog(getParent());
+            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+            	       System.out.println("You chose to open this file: " +
+            	            fc.getSelectedFile().getAbsoluteFile());
+            	       
+            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+            	       if(!Absolutefilename.endsWith(".csv")){
+            	    	   Absolutefilename = Absolutefilename.concat(".csv");
+            	    	   
+            	       }
+            	     try {
+  					copy("WIMOVAC_OutputFile_Plant.csv",Absolutefilename);
+  				} catch (IOException e3) {
+  					// TODO Auto-generated catch block
+  					e3.printStackTrace();
+  				}
+
+            	    }
+          	   
+             }
+             
+             // QIngfeng add
+           
            if (text.equals("Parameter File")) {
                ParameterFile pf=new ParameterFile(3);
                pf.customerFrame();
@@ -542,6 +588,12 @@ public class PlantGrowthTestArea extends JPanel implements ActionListener, ItemL
         frame.setSize(700,600);
         frame.setVisible(true);
     }  
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
 }
 
 

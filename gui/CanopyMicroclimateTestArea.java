@@ -11,16 +11,19 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
-import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.data.xy.XYSeriesCollection;
 import function.*;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import model.*;
 
 public class CanopyMicroclimateTestArea extends JPanel implements ActionListener, ItemListener {
@@ -32,7 +35,7 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
 	private LabelTextfieldGroup tf1;
     private JRadioButton rb1, rb2;
     private CheckBoxGroup cb;
-    private JButton C3,start;
+    private JButton C3,start,saveR;
     //constructor
     public CanopyMicroclimateTestArea() {
 
@@ -97,6 +100,11 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+        
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setAutoCreateGaps(true);
@@ -108,6 +116,7 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
                 .addGroup(layout.createSequentialGroup()    
                     .addComponent(C3)
                     .addComponent(start)  
+                    .addComponent(saveR)
                 )
         );
         
@@ -117,6 +126,7 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                   .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                 )
          );      
              
@@ -260,6 +270,42 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
            if (text.equals("   Start   ")) {
               calculation();
            }
+           if (text.equals("Save Results")) {
+
+
+          	 //SAVE to a user choose file. 
+      	    	final JFileChooser fc;
+      	    	if(WIMOVAC.WorkingDirOpened){
+      	    		fc = new JFileChooser(WIMOVAC.OpenedWorkingDir);
+      	    	}else{
+      	    		fc = new JFileChooser();
+      	    	}
+
+            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            		        ".csv", "csv");
+            	   fc.setFileFilter(filter);
+            	   int returnVal = fc.showSaveDialog(getParent());
+            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+            	       System.out.println("You chose to open this file: " +
+            	            fc.getSelectedFile().getAbsoluteFile());
+            	       
+            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+            	       if(!Absolutefilename.endsWith(".csv")){
+            	    	   Absolutefilename = Absolutefilename.concat(".csv");
+            	    	   
+            	       }
+            	     try {
+  					copy("WIMOVAC_OutputFile_CanopyMicroclimate.csv",Absolutefilename);
+  				} catch (IOException e3) {
+  					// TODO Auto-generated catch block
+  					e3.printStackTrace();
+  				}
+
+            	    }
+          	   
+             }
+             
+             // QIngfeng add
     }
     //handle item change events from all the components
     public void itemStateChanged(ItemEvent e) {
@@ -294,4 +340,11 @@ public class CanopyMicroclimateTestArea extends JPanel implements ActionListener
         frame.setSize(650,550);
         frame.setVisible(true);
     }     
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
+    
 }

@@ -11,21 +11,26 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.jfree.data.xy.XYSeriesCollection;
 import function.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import model.*;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.OutputStreamWriter;
 
 public class LeafAssimilation extends JPanel implements ActionListener, ItemListener {
        
     private static final long serialVersionUID = 1L;
 
-    private JButton C3,start,parameterfile;
+    private JButton C3,start,saveR,parameterfile;
 
     private LabelTextfieldGroup tf1, tf2, tf3;
     
@@ -44,6 +49,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         String title0[]={"Light_0 (umol.m-2.s-1)", "CO2 conc(Ca)_0 (ppm)", "Temperature_0 (oC)"};
             		  
         String title1[]={"Light_1 (umol.m-2.s-1)", "CO2 conc(Ca)_1 (ppm)", "Temperature_1 (oC)"};
+        
         radio1=new RadioButtonGroup(3,title0);
         panel1.add(radio1.createRadioButtonGroup());
         radio1.rb[0].addActionListener(this);
@@ -114,6 +120,8 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
+        
+        
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -132,6 +140,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addGroup(layout.createSequentialGroup()    
             //        .addComponent(C3)
                     .addComponent(start)  
+                    .addComponent(saveR)
                     .addComponent(parameterfile)               
                 )
         );
@@ -144,6 +153,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
             //      .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                   .addComponent(parameterfile) 
                 )
          );        
@@ -741,8 +751,6 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                ParameterFile pf=new ParameterFile(1);
              //  pf.customerFrame();
            }
-           
-           // QIngfeng add
            
            
            
