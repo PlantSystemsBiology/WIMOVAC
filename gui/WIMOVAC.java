@@ -30,6 +30,9 @@ public class WIMOVAC extends JPanel implements ActionListener {
     public static boolean WorkingDirOpened = false;
     public static String OpenedWorkingDir = "";
     
+    public static boolean ResultDirOpened = false;
+    public static String ResultDir = "";
+    
     //  Auxilary variables for transpiration
     public static double[] DryAirDensity={1.316, 1.292, 1.296, 1.246, 1.225, 1.204, 1.183, 1.164, 1.146, 1.128, 1.11};
     public static double[] LatentHeatVapour={2.513, 2.501, 2.489, 2.477, 2.465, 2.454, 2.442, 2.43, 2.418, 2.406, 2.394};
@@ -181,19 +184,19 @@ public class WIMOVAC extends JPanel implements ActionListener {
     	if (text.equals("   Start   ")){
     	
            if (r1.isSelected()) {
-               LeafAssimilationTestArea  leafassimilation=new LeafAssimilationTestArea();
+               LeafAssimilation  leafassimilation=new LeafAssimilation();
                leafassimilation.createAndShowGUI();
            }
            else if (r2.isSelected()) {
-               CanopyMicroclimateTestArea  canopymicro=new CanopyMicroclimateTestArea();
+               CanopyMicroclimate  canopymicro=new CanopyMicroclimate();
                canopymicro.createAndShowGUI();
            }
            else if (r4.isSelected()) {
-               CanopyAssimilationTestArea  canopyassimilation=new CanopyAssimilationTestArea();
+               CanopyAssimilation  canopyassimilation=new CanopyAssimilation();
                canopyassimilation.createAndShowGUI();
            }
            else if (r3.isSelected()) {
-               PlantGrowthTestArea  plantgrowth=new PlantGrowthTestArea();
+               PlantGrowth  plantgrowth=new PlantGrowth();
                plantgrowth.createAndShowGUI();
            } 
     	}
@@ -295,6 +298,8 @@ public class WIMOVAC extends JPanel implements ActionListener {
            	    	   Absolutefilename = Absolutefilename.concat(".xml");
            	    	   
            	       }
+           	    OpenedWorkingDir = fc.getSelectedFile().getParent();
+       	      WorkingDirOpened = true;
            	       
            	      File f3 = new File(Absolutefilename); 
                     FileOutputStream fid3 = null;
@@ -343,6 +348,8 @@ public class WIMOVAC extends JPanel implements ActionListener {
       	    	   Absolutefilename = Absolutefilename.concat(".xml");
       	    	   
       	       }
+      	     OpenedWorkingDir = fc.getSelectedFile().getParent();
+    	      WorkingDirOpened = true;
       	       
       	      File f3 = new File(Absolutefilename); 
                FileOutputStream fid3 = null;

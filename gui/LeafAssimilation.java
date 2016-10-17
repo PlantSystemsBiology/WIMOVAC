@@ -27,7 +27,7 @@ import java.nio.file.Paths;
 import java.io.OutputStreamWriter;
 
 public class LeafAssimilation extends JPanel implements ActionListener, ItemListener {
-       
+
     private static final long serialVersionUID = 1L;
 
     private JButton C3,start,saveR,parameterfile;
@@ -49,7 +49,6 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         String title0[]={"Light_0 (umol.m-2.s-1)", "CO2 conc(Ca)_0 (ppm)", "Temperature_0 (oC)"};
             		  
         String title1[]={"Light_1 (umol.m-2.s-1)", "CO2 conc(Ca)_1 (ppm)", "Temperature_1 (oC)"};
-        
         radio1=new RadioButtonGroup(3,title0);
         panel1.add(radio1.createRadioButtonGroup());
         radio1.rb[0].addActionListener(this);
@@ -120,8 +119,11 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
-        
-        
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -138,7 +140,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addComponent(panel3)
                 .addComponent(panel4)    
                 .addGroup(layout.createSequentialGroup()    
-            //        .addComponent(C3)
+                    .addComponent(C3)
                     .addComponent(start)  
                     .addComponent(saveR)
                     .addComponent(parameterfile)               
@@ -151,7 +153,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addComponent(panel3)
                 .addComponent(panel4)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-            //      .addComponent(C3)
+                  .addComponent(C3)
                   .addComponent(start)
                   .addComponent(saveR)
                   .addComponent(parameterfile) 
@@ -199,7 +201,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
 
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -276,7 +278,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -352,7 +354,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -428,7 +430,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -506,7 +508,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         JFrame result = null;
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -580,7 +582,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -662,6 +664,47 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                         calculationTem_CO2loop(); 
                }
            } 
+           
+
+           if (text.equals("Save Results")) {
+
+
+        	 //SAVE to a user choose file. 
+    	    	final JFileChooser fc;
+    	    	if(WIMOVAC.ResultDirOpened){
+    	    		fc = new JFileChooser(WIMOVAC.ResultDir);
+    	    	}else{
+    	    		fc = new JFileChooser();
+    	    	}
+
+          	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          		        ".csv", "csv");
+          	   fc.setFileFilter(filter);
+          	   int returnVal = fc.showSaveDialog(getParent());
+          	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+          	       System.out.println("You chose to open this file: " +
+          	            fc.getSelectedFile().getAbsoluteFile());
+          	       
+          	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+          	       if(!Absolutefilename.endsWith(".csv")){
+          	    	   Absolutefilename = Absolutefilename.concat(".csv");
+          	    	   
+          	       }
+          	     WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
+        	     WIMOVAC.ResultDirOpened = true;
+          	     try {
+					copy("WIMOVAC_OutputFile_Leaf.csv",Absolutefilename);
+				} catch (IOException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
+
+          	    }
+        	   
+           }
+           
+           // QIngfeng add
+           
            if (text.equals("Light_0 (umol.m-2.s-1)") ) {
         	   
                radio3.disable(0);
@@ -749,8 +792,10 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
            } 
            if (text.equals("Parameter File")) {
                ParameterFile pf=new ParameterFile(1);
-             //  pf.customerFrame();
+               pf.customerFrame();
            }
+           
+           // QIngfeng add
            
            
            
@@ -789,6 +834,12 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         frame.setLocationRelativeTo(null); //center it
         frame.setSize(500,550);
         frame.setVisible(true);
+    }
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
     }
     
     

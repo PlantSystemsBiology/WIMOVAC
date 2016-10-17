@@ -12,27 +12,32 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
-import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.*;
 import function.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.jfree.data.xy.XYSeriesCollection;
 
 
 public class CanopyAssimilation extends JPanel implements ActionListener, ItemListener {
-       
-    private LabelTextfieldGroup tf1;
+	   
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private LabelTextfieldGroup tf1;
     private JRadioButton rb1, rb2;
     private CheckBoxGroup cb;
-    private JButton C3,start,parameterfile;
+    private JButton C3,start,saveR,parameterfile;
    
     //constructor
     public CanopyAssimilation() {
@@ -58,7 +63,7 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
                      //    "Shaded leaves nitrogen content (g/m2)", 
                          "LAI of shaded leaves (m2 leaf.m-2)",
                          "LAI of sunlit leaves (m2 leaf.m-2)", 
-                         "Conductance (mmol H2O.m-2.s-1)"};     
+                         "Average stomatal conductance (mol H2O.m-2.s-1)"};     
         cb =new CheckBoxGroup(6,title2);
         north.add(cb.createCheckBoxGroup());
         cb.setDefault(0);
@@ -94,6 +99,11 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
         start.setFont(f1);
         start.setBorder(raisedbevel);
         start.addActionListener(this);
+
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
         
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
@@ -109,8 +119,9 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
                 .addComponent(north)
                 .addComponent(center)
                 .addGroup(layout.createSequentialGroup()    
-        //            .addComponent(C3)
+                    .addComponent(C3)
                     .addComponent(start) 
+                    .addComponent(saveR)
                     .addComponent(parameterfile)
                 )
         );
@@ -119,8 +130,9 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
                 .addComponent(north)
                 .addComponent(center)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-          //        .addComponent(C3)
+                  .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                   .addComponent(parameterfile)
                 )
          );      
@@ -210,7 +222,7 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
       	
       	if(cb.cb[5].isSelected()){
       		c4.addSeries(mcr.xys_conductance);
-      		JFrame result = new Graph(c4,"Sunlit/shaded Canopy Assimilation Module","Time (hours)","Conductance (mmol.m-2.s-1)");
+      		JFrame result = new Graph(c4,"Sunlit/shaded Canopy Assimilation Module","Time (hours)","Average stomatal conductance (mol.m-2.s-1)");
             result.setSize(400, 400);
             result.setVisible(true);
       	}
@@ -218,12 +230,12 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
 
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_CanopyAssimilation.csv")),true);              
-              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Conductance (mmol.m-2.s-1)");
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_CanopyAssimilation.csv")),true);              
+              pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Average stomatal conductance (mol.m-2.s-1)");
              int number=mcr.xys_Ac.getItemCount();
              for (int i=0; i<number; i++){
-                
-                  pw1.println(mcr.xys_Ac.getX(i)+","+mcr.xys_Ac.getY(i)+","+mcr.xys_Ac_shaded.getY(i)+","+mcr.xys_Ac_sunlit.getY(i)+","+mcr.xys_LAI_sunlit.getY(i)+","+mcr.xys_LAI_shaded.getY(i)+","+mcr.xys_conductance.getY(i));
+                  double avggs = mcr.xys_conductance.getY(i).doubleValue()/1000;
+                  pw1.println(mcr.xys_Ac.getX(i)+","+mcr.xys_Ac.getY(i)+","+mcr.xys_Ac_shaded.getY(i)+","+mcr.xys_Ac_sunlit.getY(i)+","+mcr.xys_LAI_sunlit.getY(i)+","+mcr.xys_LAI_shaded.getY(i)+","+avggs);
              }
              
              
@@ -249,6 +261,44 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
            if (text.equals("   Start   ")) {
               calculation();
            }    
+           if (text.equals("Save Results")) {
+
+
+            	 //SAVE to a user choose file. 
+        	    	final JFileChooser fc;
+        	    	if(WIMOVAC.ResultDirOpened){
+        	    		fc = new JFileChooser(WIMOVAC.ResultDir);
+        	    	}else{
+        	    		fc = new JFileChooser();
+        	    	}
+
+              	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+              		        ".csv", "csv");
+              	   fc.setFileFilter(filter);
+              	   int returnVal = fc.showSaveDialog(getParent());
+              	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+              	       System.out.println("You chose to open this file: " +
+              	            fc.getSelectedFile().getAbsoluteFile());
+              	       
+              	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+              	       if(!Absolutefilename.endsWith(".csv")){
+              	    	   Absolutefilename = Absolutefilename.concat(".csv");
+              	    	   
+              	       }
+              	     WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
+            	     WIMOVAC.ResultDirOpened = true;
+              	     try {
+    					copy("WIMOVAC_OutputFile_CanopyAssimilation.csv",Absolutefilename);
+    				} catch (IOException e3) {
+    					// TODO Auto-generated catch block
+    					e3.printStackTrace();
+    				}
+
+              	    }
+            	   
+               }
+               
+               // QIngfeng add
            if (text.equals("Parameter File")) {
                ParameterFile pf=new ParameterFile(2);
                pf.customerFrame();
@@ -288,6 +338,13 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
         frame.setSize(650,450);
         frame.setVisible(true);
     }   
+    
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
     
     
      
