@@ -739,7 +739,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
            } 
            if (text.equals("Parameter File")) {
                ParameterFile pf=new ParameterFile(1);
-               pf.customerFrame();
+             //  pf.customerFrame();
            }
            
            // QIngfeng add

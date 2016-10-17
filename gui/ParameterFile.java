@@ -72,6 +72,7 @@ public class ParameterFile extends JPanel implements ActionListener{
     private String[] parametername,updated;
     private double[] parametervalue;
     private JPanel center;
+    private JFrame frame;
     private String type[]={" ", "Leaf Properties", "Canopy Properties", "Plant Growth Properties"};
     File f;
     
@@ -92,6 +93,23 @@ public class ParameterFile extends JPanel implements ActionListener{
     
     
     public ParameterFile(int i){
+    	
+    	
+    	//QF
+     	try {
+             UIManager.setLookAndFeel(
+                 UIManager.getCrossPlatformLookAndFeelClassName());
+         } catch (Exception e) { }
+     
+         frame = new JFrame("Customer Designed Parameter File");
+    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+         //Create and set up the content pane.
+     //    ParameterFile newContentPane = new ParameterFile(index);  
+         
+         
+         
+     	//QF
+        
         index=i;
         parametername=new String[500];
         parametervalue=new double[500];
@@ -121,25 +139,12 @@ public class ParameterFile extends JPanel implements ActionListener{
         ok.setFont(f2);
         ok.setBorder(raisedbevel);
         ok.addActionListener(this);
-/*        
-        JButton original=new JButton("Load Original Data");
-        original.setFont(f2);
-        original.setBorder(raisedbevel);
-        original.addActionListener(this);*/
         
-   /*     try {
-            parameterfile = new Properties();
-            if(index==1)  {  f = new File(const_file_all);} 
-            if(index==2)  {  f = new File(const_file_canopy);} 
-            if(index==3)  {  f = new File(const_file_plant);} 
-            FileInputStream fid = new FileInputStream(f); 
-            parameterfile.load(fid); 
-        }
-        
-        catch (IOException e) { 
-           // catch io errors from FileInputStream 
-           System.out.println("Uh oh, got an IOException error!" + e.getMessage()); 
-        }*/
+        JButton cancel=new JButton("  Cancel  ");
+        cancel.setFont(f2);
+        cancel.setBorder(raisedbevel);
+        cancel.addActionListener(this);
+
        
         if (index == 1){
         // QF set the classification of all leaf parameters. 
@@ -427,16 +432,6 @@ public class ParameterFile extends JPanel implements ActionListener{
 			
 		}
 
-		
-        // QF
-        
-//        Enumeration em = parameterfile.keys();
-//        p=0;
-//        while(em.hasMoreElements()){
-//              parametername[p] = (String)em.nextElement();
-//              parametervalue[p]= Double.valueOf(parameterfile.getProperty(parametername[p]));
-//              p++;
-//        }
         
         tf=new LabelTextfieldGroup(p,parametername,parametervalue);
         center.add(tf.createHorizontalLabelTextfieldGroup()); 
@@ -454,7 +449,8 @@ public class ParameterFile extends JPanel implements ActionListener{
                 .addGroup(layout.createSequentialGroup()
                     .addComponent(save)
                     .addComponent(ok)
-               //     .addComponent(original)
+                    .addComponent(cancel)
+
                 )
         );
         
@@ -466,7 +462,8 @@ public class ParameterFile extends JPanel implements ActionListener{
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                     .addComponent(save)
                     .addComponent(ok)
-             //       .addComponent(original)
+                    .addComponent(cancel)
+
                 )
          );
         
@@ -481,333 +478,66 @@ public class ParameterFile extends JPanel implements ActionListener{
       		 for (int t=0; t<tf.tfHorizontal.length; t++)
       		 tf.tfHorizontal[t].setText(WIMOVAC.constants.getProperty(PlantLevelparameters.get(t)));
       //   }
-    }   
-    
-    public void actionPerformed(ActionEvent e) {
-        
-           String text = (String)e.getActionCommand();
-           if (text.equals("   Apply   ")) {    // Use this As Apply.   
-        	   
-        	   // Apply Update Parameters Directly to WIMOVAC constants
-        	   
-                   for (int i=0; i<p; i++) 
-                        updated[i] = tf.tfHorizontal[i].getText();
-
-                   for (int i=0; i<p; i++)        
-                	   WIMOVAC.constants.setProperty(parametername[i],updated[i]);   
-           }
-           if (text.equals("  OK  ")) {    // Use this As Apply.   
-        	   center.setVisible(false);
-        	   return;
-        	   
-           }
-    }
-                   
-                   
-                   
-                 
-            	   
-                   
-                   /*
-                   if(index==1)  {  
-                       try{
-                            File f3 = new File(update_file_leaf); 
-                            FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "WMOVAC ConstantsFile_leaf");  
-                        }
-                        catch (IOException o) { 
-                            // catch io errors from FileOutputStream 
-                            System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                        }
-                   
-                    } 
-                 
-                   if(index==2)  {  
-                       try{
-                            File f3 = new File(update_file_canopy); 
-                            FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "WIMOVAC ConstantsFile_canopy");  
-                          
-                        }
-                        catch (IOException o) { 
-                            // catch io errors from FileOutputStream 
-                            System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                        }
-                   
-                    } 
-                   
-                   if(index==3)  {  
-                       try{
-                            File f3 = new File(update_file_plant); 
-                            FileOutputStream fid3 = new FileOutputStream(f3);   
-                            d.store(fid3, "WIMOVAC ConstantsFile_plant");  
-                        }
-                        catch (IOException o) { 
-                            // catch io errors from FileOutputStream 
-                            System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                        }
-                   
-                    }      */
-                   
-                   // after Save, automatic load the saved value. 
-/*
-                   String file1,file2,file3;
-                   if (Constants.leafFile=="original") 
-                       file1=const_file_leaf;
-                   else file1=update_file_leaf;
-                   if (Constants.canopyFile=="original") 
-                       file2=const_file_canopy;
-                   else file2=update_file_canopy;
-                   if (Constants.plantFile=="original") 
-                       file3=const_file_plant;
-                   else file3=update_file_plant;
-                   
-                    FileInputStream in1 = null;
-                    FileInputStream in2 = null;
-                    FileInputStream in3 = null;
-                    FileOutputStream out = null;
-                    try {
-                          int i1,i2,i3;
-                          in1 = new FileInputStream(file1);
-                          in2 = new FileInputStream(file2);
-                          in3 = new FileInputStream(file3);
-                    //      out = new FileOutputStream(const_file_all);
-                          out = new FileOutputStream(parameterFileName); 
-                          
-
-                          while ((i1 = in1.read()) != -1){
-                             out.write(i1);
-                          }
-                          while ((i2 = in2.read()) != -1){
-                             out.write(i2);
-                          }
-                          while ((i3 = in3.read()) != -1){
-                             out.write(i3);
-                          }
-                          
-                         // File f = new File(const_file_all); 
-                          File f = new File(parameterFileName); 
-                          
-                          FileInputStream fid = new FileInputStream(f); 
-                          WIMOVAC.constants.load(fid);
-                          System.out.println("totalvalue"+WIMOVAC.constants.size());
-
-                     }
-                     
-                    catch (IOException o) { 
-                       // catch io errors from FileInputStream 
-                       System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                    }
-               } */
-               /*
-               if (text.equals("Load Saved Data")) { 
-                   try {
-                       parameterfile = new Properties();
-                       if(index==1)  {  
-                           f = new File(update_file_leaf);
-                           Constants.leafFile="update";
-                       } 
-                       if(index==2)  {  
-                           f = new File(update_file_canopy);
-                           Constants.canopyFile="update";
-                       } 
-                       if(index==3)  {  
-                           f = new File(update_file_plant);
-                           Constants.plantFile="update";
-                       } 
-                       
-                       
-                       FileInputStream fid = new FileInputStream(f); 
-                       parameterfile.load(fid); 
-                    }
-        
-                    catch (IOException o) { 
-                        // catch io errors from FileInputStream 
-                        System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                     }
-                   
-                 //QF, fill up the text box with values in the sequence of given. 
-                   for (int t=0; t<parameterfile.size(); t++){
-                  	 if (index == 1)
-                  		 tf.tfHorizontal[t].setText(parameterfile.getProperty(Leafparameters.get(t)));
-                  	 if (index == 2)
-                  		 tf.tfHorizontal[t].setText(parameterfile.getProperty(CanopyLevelparameters.get(t)));
-                  	 if (index == 3)
-                  		 tf.tfHorizontal[t].setText(parameterfile.getProperty(PlantLevelparameters.get(t)));
-                   }
-//        
-//                     Enumeration em = parameterfile.keys();
-//                     int p1=0;
-//                     while(em.hasMoreElements()){
-//                         parametername[p1] = (String)em.nextElement();
-//                         tf.tfHorizontal[p1].setText(parameterfile.getProperty(parametername[p1]));
-//                         p1++;
-//                     } 
-                     
-                     //update constants property
-                     
-                     
-                    String file1,file2,file3;
-                    if (Constants.leafFile=="original") 
-                        file1=const_file_leaf;
-                    else file1=update_file_leaf;
-                    if (Constants.canopyFile=="original") 
-                        file2=const_file_canopy;
-                    else file2=update_file_canopy;
-                    if (Constants.plantFile=="original") 
-                        file3=const_file_plant;
-                    else file3=update_file_plant;
-                    
-                     FileInputStream in1 = null;
-                     FileInputStream in2=null;
-                     FileInputStream in3=null;
-                     FileOutputStream out = null;
-                     try {
-                           int i1,i2,i3;
-                           in1 = new FileInputStream(file1);
-                           in2 = new FileInputStream(file2);
-                           in3 = new FileInputStream(file3);
-                           out = new FileOutputStream(const_file_all);
-
-                           while ((i1 = in1.read()) != -1){
-                              out.write(i1);
-                           }
-                           while ((i2 = in2.read()) != -1){
-                              out.write(i2);
-                           }
-                           while ((i3 = in3.read()) != -1){
-                              out.write(i3);
-                           }
-                           
-                           File f = new File(const_file_all); 
-                           FileInputStream fid = new FileInputStream(f); 
-                           WIMOVAC.constants.load(fid);
-                           System.out.println("totalvalue"+WIMOVAC.constants.size());
-
-                      }
-                      
-                     catch (IOException o) { 
-                        // catch io errors from FileInputStream 
-                        System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                     }
-                          
-                     
-                }
-               */
-               
-               // change this to OPEN
-     /*          if (text.equals("Load Original Data")) { 
-            	   
-            	   
-            	   
-            	   
-                     try {
-            //           parameterfile = new Properties();
-            //           if(index==1)  {  f = new File(const_file_leaf);  Constants.leafFile="original";} 
-            //           if(index==2)  {  f = new File(const_file_canopy);Constants.canopyFile="original";} 
-            //           if(index==3)  {  f = new File(const_file_plant); Constants.plantFile="original";} 
-                       
-                       f = new File(parameterFileName); 
-                       
-                       FileInputStream fid = new FileInputStream(f);
-                       WIMOVAC.constants.load(fid); // load all parameters 
-                    }
-                    catch (IOException o) { 
-                        // catch io errors from FileInputStream 
-                        System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                     }
-                     
-                     //QF, it should be OK for show all the text box values. 
-                  //   for (int t=0; t<parameterfile.size(); t++){
-                    	 if (index == 1)
-                    		 for (int t=0; t<tf.tfHorizontal.length; t++)
-                    		 tf.tfHorizontal[t].setText(parameterfile.getProperty(Leafparameters.get(t)));
-                    	 if (index == 2)
-                    		 for (int t=0; t<tf.tfHorizontal.length; t++)
-                    		 tf.tfHorizontal[t].setText(parameterfile.getProperty(CanopyLevelparameters.get(t)));
-                    	 if (index == 3)
-                    		 for (int t=0; t<tf.tfHorizontal.length; t++)
-                    		 tf.tfHorizontal[t].setText(parameterfile.getProperty(PlantLevelparameters.get(t)));
-         */           // }
-                     
-                   //  Enumeration em = parameterfile.keys();
-//                     int p2=0;
-//                     while(em.hasMoreElements()){
-//                         parametername[p2] = (String)em.nextElement();
-//                         tf.tfHorizontal[p2].setText(parameterfile.getProperty(parametername[p2]));
-//                         p2++;
-//                     }  
-             /*        String file1,file2,file3;
-                    if (Constants.leafFile=="original") 
-                        file1=const_file_leaf;
-                    else file1=update_file_leaf;
-                    if (Constants.canopyFile=="original") 
-                        file2=const_file_canopy;
-                    else file2=update_file_canopy;
-                    if (Constants.plantFile=="original") 
-                        file3=const_file_plant;
-                    else file3=update_file_plant;
-                    
-                     FileInputStream in1 = null;
-                     FileInputStream in2 = null;
-                     FileInputStream in3 = null;
-                     FileOutputStream out= null;
-                     try {
-                           int i1,i2,i3;
-                           in1 = new FileInputStream(file1);
-                           in2 = new FileInputStream(file2);
-                           in3 = new FileInputStream(file3);
-                           out = new FileOutputStream(const_file_all);
-
-                           while ((i1 = in1.read()) != -1){
-                              out.write(i1);
-                           }
-                           while ((i2 = in2.read()) != -1){
-                              out.write(i2);
-                           }
-                           while ((i3 = in3.read()) != -1){
-                              out.write(i3);
-                           }
-                           
-                      }
-                      
-                     catch (IOException o) { 
-                        // catch io errors from FileInputStream 
-                        System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                     }
-                     try {
-                       
-                       File f = new File(const_file_all); 
-                       FileInputStream fid = new FileInputStream(f); 
-                       WIMOVAC.constants.load(fid);               
-                     } 
-                     catch (IOException o) { 
-                          // catch io errors from FileInputStream 
-                         System.out.println("Uh oh, got an IOException error!" + o.getMessage()); 
-                      }                  */
-                     
-//               }           
-//    }
-          
-    
-        
-     public void customerFrame(){
-        try {
-            UIManager.setLookAndFeel(
-                UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (Exception e) { }
-    
-        JFrame frame = new JFrame("Customer Designed Parameter File");
-   //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Create and set up the content pane.
-        ParameterFile newContentPane = new ParameterFile(index);  
-        frame.setContentPane(newContentPane);         
+      	 
+      	frame.setContentPane(this);         
         
         //Display the window
         frame.pack();
         frame.setLocationRelativeTo(null); //center it
         frame.setSize(500,550);
         frame.setVisible(true);
+    }   
+    
+    public void actionPerformed(ActionEvent e) {
+        
+           String text = (String)e.getActionCommand();
+           if (text.equals("   Apply   ")) {    // Use this As Apply.   
+        	   // Apply Update Parameters Directly to WIMOVAC constants
+        	  save();
+                   
+           }
+           if (text.equals("  OK  ")) {    // Use this As Apply.   
+        	// Apply Update Parameters Directly to WIMOVAC constants
+               save();
+        	   frame.dispose();
+        	   
+           }
+           
+           if (text.equals("  Cancel  ")) {    // Use this As Apply.   
+        	   frame.dispose();
+        	   
+           }
+    }
+    
+    private void save(){
+    	
+    	if (isAllFilled()){
+    		for (int i=0; i<p; i++) 
+                updated[i] = tf.tfHorizontal[i].getText();
+
+            for (int i=0; i<p; i++)        
+        	   WIMOVAC.constants.setProperty(parametername[i],updated[i]);   
+    	}
+     	else{
+     		JOptionPane.showMessageDialog(null, "Some parameters NOT filled ! \n You Can OPEN a parameter file from WIMVOAC");
+     	}
+    	
+    	
+    	
+    }
+    
+    private boolean isAllFilled(){
+    	for (int i=0; i<p; i++){ 
+            if (tf.tfHorizontal[i].getText().isEmpty())
+            	return false;
+    	}
+    	return true;
+    }
+                   
+
+     public void customerFrame(){
+        
+    	// put it here. 
      }
     
 }

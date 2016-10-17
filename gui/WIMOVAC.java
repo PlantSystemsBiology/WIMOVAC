@@ -47,7 +47,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
         
         Font f1=new Font("Times New Roman", Font.BOLD, 30);
         Font f2=new Font("Times New Roman", Font.BOLD, 20);
-        Font f3 = new Font("Times New Roman", Font.ITALIC, 20);
+        Font f3 = new Font("Times New Roman", Font.PLAIN, 20);
 
         Border loweredbevel=BorderFactory.createLoweredBevelBorder();
         Border raisedbevel=BorderFactory.createRaisedBevelBorder();
@@ -202,8 +202,13 @@ public class WIMOVAC extends JPanel implements ActionListener {
      	   //QF 2016-10-13
      	   
      	   //OPEN to a user choose file. 
+    		final JFileChooser fc2;
+    		if(WorkingDirOpened){
+ 	    		fc2 = new JFileChooser(OpenedWorkingDir);
+    		}else{
+    			fc2 = new JFileChooser();
+    		}
      	   
-     	   final JFileChooser fc2 = new JFileChooser();
      	   
      	   FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
      		        ".xml", "xml");
@@ -259,7 +264,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
   				e2.printStackTrace();
                 }   
                 try {
-  				WIMOVAC.constants.store(fid3, "WMOVAC Parameters");
+  				WIMOVAC.constants.storeToXML(fid3, "WMOVAC Parameters");
                 } catch (IOException e1) {
   				// TODO Auto-generated catch block
   				e1.printStackTrace();
