@@ -1,3 +1,7 @@
+/*
+ * version 1.2: improved GUI, improved file save, open functions. 2016.10.18. Qingfeng
+ */
+
 package gui;
 /*
  * WIMOVAC.java
@@ -205,11 +209,19 @@ public class WIMOVAC extends JPanel implements ActionListener {
      	   //QF 2016-10-13
      	   
      	   //OPEN to a user choose file. 
-    		final JFileChooser fc2;
+    		JFileChooser fc2;
     		if(WorkingDirOpened){
  	    		fc2 = new JFileChooser(OpenedWorkingDir);
     		}else{
-    			fc2 = new JFileChooser();
+    			String current="";
+				try {
+					current = new File( "." ).getCanonicalPath();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					fc2 = new JFileChooser();
+				}
+    			fc2 = new JFileChooser(current);
     		}
      	   
      	   
@@ -276,11 +288,19 @@ public class WIMOVAC extends JPanel implements ActionListener {
     		
      	    }else{
      	    	//SAVE to a user choose file. 
-     	    	final JFileChooser fc;
+     	    	JFileChooser fc;
      	    	if(WorkingDirOpened){
      	    		fc = new JFileChooser(OpenedWorkingDir);
      	    	}else{
-     	    		fc = new JFileChooser();
+     	    		String current="";
+    				try {
+    					current = new File( "." ).getCanonicalPath();
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    					fc = new JFileChooser();
+    				}
+        			fc = new JFileChooser(current);
      	    	}
      	    		
      	    	
@@ -328,11 +348,19 @@ public class WIMOVAC extends JPanel implements ActionListener {
       	   
       	   //SAVE to a user choose file. 
       	   
-    		final JFileChooser fc;
+    		JFileChooser fc;
  	    	if(WorkingDirOpened){
  	    		fc = new JFileChooser(OpenedWorkingDir);
  	    	}else{
- 	    		fc = new JFileChooser();
+ 	    		String current="";
+				try {
+					current = new File( "." ).getCanonicalPath();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					fc = new JFileChooser();
+				}
+    			fc = new JFileChooser(current);
  	    	}
       	   
       	   FileNameExtensionFilter filter = new FileNameExtensionFilter(

@@ -677,11 +677,19 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
 
 
         	 //SAVE to a user choose file. 
-    	    	final JFileChooser fc;
+    	    	JFileChooser fc;
     	    	if(WIMOVAC.ResultDirOpened){
     	    		fc = new JFileChooser(WIMOVAC.ResultDir);
     	    	}else{
-    	    		fc = new JFileChooser();
+    	    		String current="";
+    				try {
+    					current = new File( "." ).getCanonicalPath();
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    					fc = new JFileChooser();
+    				}
+        			fc = new JFileChooser(current);
     	    	}
 
           	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
