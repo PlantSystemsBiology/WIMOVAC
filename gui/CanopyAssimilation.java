@@ -230,7 +230,7 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
 
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_CanopyAssimilation.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_CanopyAssimilation.csv")),true);              
               pw1.println("Time (hour), Canopy assimilation rate (umol.m-1.s-1),Sunlit leaves assimilation rate (umol.m-1.s-1), Shaded leaves assimilation rate (umol.m-1.s-1), LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Average stomatal conductance (mol.m-2.s-1)");
              int number=mcr.xys_Ac.getItemCount();
              for (int i=0; i<number; i++){
@@ -302,7 +302,7 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
               	     WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
             	     WIMOVAC.ResultDirOpened = true;
               	     try {
-    					copy("WIMOVAC_OutputFile_CanopyAssimilation.csv",Absolutefilename);
+    					copy("temp/WIMOVAC_OutputFile_CanopyAssimilation.csv",Absolutefilename);
     				} catch (IOException e3) {
     					// TODO Auto-generated catch block
     					e3.printStackTrace();

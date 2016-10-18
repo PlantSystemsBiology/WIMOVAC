@@ -241,7 +241,7 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
         
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_CanopyMicroclimate.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_CanopyMicroclimate.csv")),true);              
              pw1.println("Time (hour), Direct sunlight (micro mol.m-2.s-1),Diffuse sunlight (micro mol.m-2.s-1),Light at sunlit leaves(micro mol.m-2.s-1),Light at shaded leaves(micro mol.m-2.s-1), Light scattered by leaves(micro mol.m-2.s-1)," 
             		 +"Solar zenith angle (degree),LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Air temperature (oC)");
              int number=mcr.xys_PPFD_sunlit.getItemCount();
@@ -309,7 +309,7 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
             	       WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
               	     WIMOVAC.ResultDirOpened = true;
             	     try {
-  					copy("WIMOVAC_OutputFile_CanopyMicroclimate.csv",Absolutefilename);
+  					copy("temp/WIMOVAC_OutputFile_CanopyMicroclimate.csv",Absolutefilename);
   				} catch (IOException e3) {
   					// TODO Auto-generated catch block
   					e3.printStackTrace();

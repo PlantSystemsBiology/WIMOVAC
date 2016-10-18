@@ -48,7 +48,9 @@ public class WIMOVAC extends JPanel implements ActionListener {
     private JRadioButton r1,r2,r3,r4;
     
     public WIMOVAC() {
-        
+    	
+    	initialDir();
+    	
     	constants = new Properties();
     
         
@@ -426,4 +428,14 @@ public class WIMOVAC extends JPanel implements ActionListener {
         });
         
     }
+    
+    private void initialDir(){
+    	File f = new File ("temp");
+    	if (!f.exists()){
+    		f.mkdir();
+    	}
+
+    }
+    
+    
 }

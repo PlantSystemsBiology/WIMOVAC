@@ -201,7 +201,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
 
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -278,7 +278,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -354,7 +354,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -430,7 +430,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -508,7 +508,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         JFrame result = null;
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -582,7 +582,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -708,7 +708,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
           	     WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
         	     WIMOVAC.ResultDirOpened = true;
           	     try {
-					copy("WIMOVAC_OutputFile_Leaf.csv",Absolutefilename);
+					copy("temp/WIMOVAC_OutputFile_Leaf.csv",Absolutefilename);
 				} catch (IOException e3) {
 					// TODO Auto-generated catch block
 					e3.printStackTrace();

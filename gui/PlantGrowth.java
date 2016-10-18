@@ -476,7 +476,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("WIMOVAC_OutputFile_Plant.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Plant.csv")),true);              
              
              pw1.println("Time (day), Net assimilation rate (mol.m-1.day-1), Elapsed assimilation rate (mol.m-2), Canopy conductance (mol.m-2.day-1), Evapo/Transpiration (mol.m-2.day-1), Cumulative evapo/transpiration (mol.m-2), leaf area index (m2.m-2),"        
             		 +"Air temperature (oC), Daily mean temperature (oC), Daily highest temperature (oC), Daily lowest temperature (oC), Elapsed thermal time (days), Elapased thermal time (hours), Relative Humidity, "
@@ -553,7 +553,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
             	       WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
               	     WIMOVAC.ResultDirOpened = true;
             	     try {
-  					copy("WIMOVAC_OutputFile_Plant.csv",Absolutefilename);
+  					copy("temp/WIMOVAC_OutputFile_Plant.csv",Absolutefilename);
   				} catch (IOException e3) {
   					// TODO Auto-generated catch block
   					e3.printStackTrace();
