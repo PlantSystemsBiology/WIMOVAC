@@ -302,6 +302,19 @@ public class ParameterFile extends JPanel implements ActionListener{
 	        PlantLevelparameters.add("DegDayEndStage10");
 	        PlantLevelparameters.add("DegDayEndStage11");
 	        
+	     // 
+	        PlantLevelparameters.add("LeafNperArea_stage1");
+	        PlantLevelparameters.add("LeafNperArea_stage2");
+	        PlantLevelparameters.add("LeafNperArea_stage3");
+	        PlantLevelparameters.add("LeafNperArea_stage4");
+	        PlantLevelparameters.add("LeafNperArea_stage5");
+	        PlantLevelparameters.add("LeafNperArea_stage6");
+	        PlantLevelparameters.add("LeafNperArea_stage7");
+	        PlantLevelparameters.add("LeafNperArea_stage8");
+	        PlantLevelparameters.add("LeafNperArea_stage9");
+	        PlantLevelparameters.add("LeafNperArea_stage10");
+	        PlantLevelparameters.add("LeafNperArea_stage11");
+	        
 	        //
 	        PlantLevelparameters.add("LeafDeathThermalTime");
 	        PlantLevelparameters.add("StemDeathThermalTime");

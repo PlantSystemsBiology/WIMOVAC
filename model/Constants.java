@@ -8,6 +8,13 @@ public class Constants {
 	 */
 	//Qingfeng add
 	
+	static public int stage = 0; 
+	static public double [] LeafNperArea = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
+	
+	
+	
+	
+	
 //	static public double Frac_DeadLeafReabsorbed 	= 0.3;
 //	static public double Frac_DeadPodReabsorbed 	= 0.5;
 //	static public double Frac_DeadStemReabsorbed 	= 0;
@@ -28,6 +35,9 @@ public class Constants {
 	static public String plantFile="original";
 	
 	static public String C3orC4 = "C3";
+	static public boolean UseAQ = false;
+	static public boolean runGrowthModel = false;
+	
  	static public double RealGasConstant  = 8.314;
  	
  	public static double[] DryAirDensity={1.316, 1.292, 1.296, 1.246, 1.225, 1.204, 1.183, 1.164, 1.146, 1.128, 1.11};
@@ -93,6 +103,7 @@ public class Constants {
  //       static public double LeafAreaIndex        						= 3;
  //       static public int	 ExtinctionCalcSwitch        				= 1;        //QF we need to use different extinction coefficient for growth.  0: use default 0.8;  or  1: calcualte it depends on the canopy
  //       static public double HorizVerticalProjAreaRatio        			= 1;
+        
         static public int    TranspirationUnitsFlag        				= 0;
         static public final double KarmansConstant        					= 0.41;
         static public double WindSpeedAboveCanopy        				= 2;
@@ -254,6 +265,7 @@ public class Constants {
 	/*
 	 * growth model
 	 */
+        // default value ** for most of plants: (this in future will extends to more crops)
         static public double ComponentOfOrgans[][] = { 
     	//leaf stem s_root f_root storage pod seed
     	{0.1,  0.05, 0.05, 0.1 ,0.05  ,0.15  ,0.15}, //ProteinComponent
@@ -266,21 +278,21 @@ public class Constants {
     
         static public double RelPartition[][]    	= { 
     //  leaf   stem  sroot froot stor pod   seed
-    	{0.4,  0.09, 0.4,  0.01, 0.0, 0,    -1  }, // the first stage ( stage 0 )seed is -1, reallocation of seed to others
-        {0.5,  0.25, 0.2,  0.05, 0.0, 0.0,  0.0 }, //2
-        {0.55, 0.3,  0.0,  0.15, 0.0, 0.0,  0.0 }, //3
-        {0.55, 0.3,  0.1,  0.05, 0.0, 0.0,  0.0 }, //4
-        {0.5,  0.35, 0.1,  0.05, 0.0, 0.0,  0.0 }, //5
-        {0.38, 0.2,  0.35, 0.05, 0.1, 0.01, 0.0 }, //6 changed of sroot from 0.36 to 0.35 
-        {0.29, 0.2,  0.1,  0.01, 0.0, 0.2,  0.2 }, //7
-        {0.27, 0.17, 0.12, 0.05, 0.0, 0.17, 0.2 }, //8
-        {0.15, 0.12, 0.11, 0.05, 0.0, 0.31, 0.26}, //9
-        {0.1,  0.05, 0.01, 0.01, 0.0, 0.18, 0.65}, //10
-        {0.1,  0,    0.14, 0.0,  0.0, 0.15, 0.61}, //11
-        {0.1,  0,    0.14, 0.0,  0.0, 0.15, 0.61}, //11 12
-        {0.1,  0,    0.14, 0.0,  0.0, 0.15, 0.61}, //11 13
-        {0.1,  0,    0.14, 0.0,  0.0, 0.15, 0.61}, //11 14 assume some with 11
-        {1,1,1,1,1,1,1} };   //OK, partitioning coefficients of 14 stages for 7 organs 
+    	{0.0,  0.0, 0.0,  0.0, 0.0, 0,    0  }, // the first stage ( stage 0 )seed is -1, reallocation of seed to others
+        {0.0,  0.0, 0.0,  0.00, 0.0, 0.0,  0.0 }, //2
+        {0.0, 0.0,  0.0,  0.0, 0.0, 0.0,  0.0 }, //3
+        {0.0, 0.0,  0.0,  0.0, 0.0, 0.0,  0.0 }, //4
+        {0.0,  0.0, 0.0,  0.0, 0.0, 0.0,  0.0 }, //5
+        {0.0, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0 }, //6 changed of sroot from 0.36 to 0.35 
+        {0.0, 0.0,  0.0,  0.0, 0.0, 0.0,  0.0 }, //7
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, //8
+        {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, //9
+        {0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, //10
+        {0.0,  0,    0.0, 0.0,  0.0, 0.0, 0.0}, //11
+        {0.0,  0,    0.0, 0.0,  0.0, 0.0, 0.0}, //11 12
+        {0.0,  0,    0.0, 0.0,  0.0, 0.0, 0.0}, //11 13
+        {0.0,  0,    0.0, 0.0,  0.0, 0.0, 0.0}, //11 14 assume some with 11
+        {0,0,0,0,0,0,0} };   //OK, partitioning coefficients of 14 stages for 7 organs 
 //    static public double PartitionActual[][]    = new double[14][7]; 	//QF, actual partitioning coefficients of 14 stages for 7 organs, calcualted from RelPartition and modifier
     
         static public double k_N_uptakeCapcity   	= 0.05; 				//This is a guess. It needs to be modified   !!!!

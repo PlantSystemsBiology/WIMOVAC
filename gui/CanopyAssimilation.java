@@ -260,6 +260,7 @@ public class CanopyAssimilation extends JPanel implements ActionListener, ItemLi
            }
            if (text.equals("   Start   ")) {
         	   
+        	   Constants.runGrowthModel = false;
         	   
         	   if (isAllFilled()){ 
         		   calculation();

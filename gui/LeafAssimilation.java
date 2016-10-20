@@ -34,7 +34,9 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
 
     private LabelTextfieldGroup tf1, tf2, tf3;
     
-    private RadioButtonGroup radio1, radio2, radio3;
+    private RadioButtonGroup radio_model, radio1, radio2, radio3;
+    
+    private Checkbox useTemperatureResponse;
    
     //constructor
     public LeafAssimilation() {
@@ -43,10 +45,23 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         Border loweredbevel=BorderFactory.createLoweredBevelBorder();
         Border raisedbevel=BorderFactory.createRaisedBevelBorder();
         
+        JPanel panel0 = new JPanel (new FlowLayout());
         JPanel panel1=new JPanel(new FlowLayout());    
         panel1.setBorder(loweredbevel);   
         
+        String title_model[]={"Use Farquhar Model", "Use Light Curve Model"};
+        
         String title0[]={"Light_0 (umol.m-2.s-1)", "CO2 conc(Ca)_0 (ppm)", "Temperature_0 (oC)"};
+        
+        radio_model = new RadioButtonGroup(2,title_model);
+        panel0.add(radio_model.createRadioButtonGroup());
+        radio_model.rb[0].addActionListener(this);
+        radio_model.rb[1].addActionListener(this);
+        
+        useTemperatureResponse = new Checkbox("Use temperature response");
+        useTemperatureResponse.setState(true);
+        
+        panel0.add(useTemperatureResponse);
             		  
         String title1[]={"Light_1 (umol.m-2.s-1)", "CO2 conc(Ca)_1 (ppm)", "Temperature_1 (oC)"};
         radio1=new RadioButtonGroup(3,title0);
@@ -134,7 +149,8 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
         
-        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)          
+        layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)    
+        		.addComponent(panel0)
                 .addComponent(panel1)
                 .addComponent(panel2)
                 .addComponent(panel3)
@@ -147,7 +163,8 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 )
         );
         
-        layout.setVerticalGroup(layout.createSequentialGroup()         
+        layout.setVerticalGroup(layout.createSequentialGroup()
+        		.addComponent(panel0)
                 .addComponent(panel1)
                 .addComponent(panel2)
                 .addComponent(panel3)
@@ -629,7 +646,8 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
     
      //handle action events from all the components
     public void actionPerformed(ActionEvent e) {
-        
+    	
+    	       
            String text = (String)e.getActionCommand();
            if (text.equals("   C3   ")) {
               C3.setText("   C4   ");
@@ -646,6 +664,9 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
            if ( text.equals("   Start   ")) {
         	   
         	   if (isAllFilled()){
+        		   
+        		   Constants.runGrowthModel = false;
+        		   
         		   if(radio1.isSelected(0)){
                        if(radio3.isSelected(1))
                             calculationLight_CO2loop();  
@@ -809,6 +830,17 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                ParameterFile pf=new ParameterFile(1);
                pf.customerFrame();
            }
+           
+           //Use Farquhar Model", "Use Light Curve Model
+           
+           if (text.equals("Use Farquhar Model")) {
+        	   Constants.UseAQ = false;
+           }
+           
+           if (text.equals("Use Light Curve Model")) {
+        	   Constants.UseAQ = true;
+           }
+           
            
            // QIngfeng add
            

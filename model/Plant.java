@@ -78,6 +78,113 @@ public class Plant{
     	Frac_DeadSrootGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadSrootGoesSurface"));
     	Frac_DeadFrootGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadFrootGoesSurface"));
     	Frac_DeadStorageGoesSurface= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStorageGoesSurface"));
+    	
+    	
+    	Constants.LeafNperArea[0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage1"));
+    	Constants.LeafNperArea[1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage2"));
+    	Constants.LeafNperArea[2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage3"));
+    	Constants.LeafNperArea[3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage4"));
+    	Constants.LeafNperArea[4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage5"));
+    	Constants.LeafNperArea[5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage6"));
+    	Constants.LeafNperArea[6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage7"));
+    	Constants.LeafNperArea[7] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage8"));
+    	Constants.LeafNperArea[8] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage9"));
+    	Constants.LeafNperArea[9] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage10"));
+    	Constants.LeafNperArea[10] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage11"));
+    	
+    	
+    //  leaf   stem  sroot froot stor pod   seed
+    	Constants.RelPartition[0][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_leaf"));
+    	Constants.RelPartition[0][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_stem"));
+    	Constants.RelPartition[0][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_sroot"));
+    	Constants.RelPartition[0][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_froot"));
+    	Constants.RelPartition[0][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_stor"));
+    	Constants.RelPartition[0][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_pod"));
+    	Constants.RelPartition[0][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_seed"));
+    	
+    	Constants.RelPartition[1][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_leaf"));
+    	Constants.RelPartition[1][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_stem"));
+    	Constants.RelPartition[1][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_sroot"));
+    	Constants.RelPartition[1][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_froot"));
+    	Constants.RelPartition[1][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_stor"));
+    	Constants.RelPartition[1][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_pod"));
+    	Constants.RelPartition[1][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage2_seed"));
+    	
+    	Constants.RelPartition[2][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_leaf"));
+    	Constants.RelPartition[2][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_stem"));
+    	Constants.RelPartition[2][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_sroot"));
+    	Constants.RelPartition[2][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_froot"));
+    	Constants.RelPartition[2][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_stor"));
+    	Constants.RelPartition[2][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_pod"));
+    	Constants.RelPartition[2][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage3_seed"));
+    	
+    	Constants.RelPartition[3][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_leaf"));
+    	Constants.RelPartition[3][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_stem"));
+    	Constants.RelPartition[3][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_sroot"));
+    	Constants.RelPartition[3][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_froot"));
+    	Constants.RelPartition[3][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_stor"));
+    	Constants.RelPartition[3][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_pod"));
+    	Constants.RelPartition[3][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage4_seed"));
+    	
+    	Constants.RelPartition[4][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_leaf"));
+    	Constants.RelPartition[4][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_stem"));
+    	Constants.RelPartition[4][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_sroot"));
+    	Constants.RelPartition[4][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_froot"));
+    	Constants.RelPartition[4][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_stor"));
+    	Constants.RelPartition[4][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_pod"));
+    	Constants.RelPartition[4][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage5_seed"));
+    	
+    	Constants.RelPartition[5][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_leaf"));
+    	Constants.RelPartition[5][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_stem"));
+    	Constants.RelPartition[5][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_sroot"));
+    	Constants.RelPartition[5][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_froot"));
+    	Constants.RelPartition[5][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_stor"));
+    	Constants.RelPartition[5][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_pod"));
+    	Constants.RelPartition[5][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage6_seed"));
+    	
+    	Constants.RelPartition[6][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_leaf"));
+    	Constants.RelPartition[6][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_stem"));
+    	Constants.RelPartition[6][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_sroot"));
+    	Constants.RelPartition[6][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_froot"));
+    	Constants.RelPartition[6][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_stor"));
+    	Constants.RelPartition[6][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_pod"));
+    	Constants.RelPartition[6][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage7_seed"));
+    	
+    	Constants.RelPartition[7][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_leaf"));
+    	Constants.RelPartition[7][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_stem"));
+    	Constants.RelPartition[7][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_sroot"));
+    	Constants.RelPartition[7][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_froot"));
+    	Constants.RelPartition[7][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_stor"));
+    	Constants.RelPartition[7][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_pod"));
+    	Constants.RelPartition[7][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage8_seed"));
+    	
+    	Constants.RelPartition[8][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_leaf"));
+    	Constants.RelPartition[8][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_stem"));
+    	Constants.RelPartition[8][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_sroot"));
+    	Constants.RelPartition[8][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_froot"));
+    	Constants.RelPartition[8][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_stor"));
+    	Constants.RelPartition[8][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_pod"));
+    	Constants.RelPartition[8][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage9_seed"));
+    	
+    	Constants.RelPartition[9][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_leaf"));
+    	Constants.RelPartition[9][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_stem"));
+    	Constants.RelPartition[9][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_sroot"));
+    	Constants.RelPartition[9][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_froot"));
+    	Constants.RelPartition[9][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_stor"));
+    	Constants.RelPartition[9][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_pod"));
+    	Constants.RelPartition[9][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage10_seed"));
+    	
+    	Constants.RelPartition[10][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_leaf"));
+    	Constants.RelPartition[10][1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_stem"));
+    	Constants.RelPartition[10][2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_sroot"));
+    	Constants.RelPartition[10][3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_froot"));
+    	Constants.RelPartition[10][4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_stor"));
+    	Constants.RelPartition[10][5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_pod"));
+    	Constants.RelPartition[10][6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage11_seed"));
+    	
+    	
+    	
+    	
         
 	}
 

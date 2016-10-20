@@ -513,6 +513,8 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
            }
            if (text.equals("   Start   ")) {
         	   if (isAllFilled()){
+        		   Constants.runGrowthModel = true;
+        		   
         		   calculation();
         	   }else{
         		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");

@@ -36,6 +36,10 @@ public class Leaf extends Organ {
 	double Ko; // Ko
 	double Kc; // Kc
 	double g0, g1;
+	
+	// variables for AQ curve model, used in Festulolium, add in 2015-04-28, Qingfeng , Xiurong
+		double Amax, phi, theta; 
+		double Nleaf = 5; //%   
 
 	// for C4_Von model
 	double Vpmax = 120;
@@ -75,7 +79,20 @@ public class Leaf extends Organ {
 		// PPFD=env.light;
 	}
 
-	public void cal_c3(Environment env) {
+	public void cal_c3(Environment env){
+		
+		if(Constants.UseAQ){
+			cal_AQ(env);
+		}else{
+			cal_Farquhar(env);
+		}
+		
+		
+		
+		
+	}
+	
+	private void cal_Farquhar(Environment env) {
 
 		T = Tair;
 		Ci = Cs * SOLC(T) * 0.7;
@@ -120,8 +137,72 @@ public class Leaf extends Organ {
 		// Set the output variables for the module
 	}
 
+
+	private void cal_AQ(Environment env){
+		double PAR = PPFD;
+		T = Tair;
+		Amax = Double.valueOf(WIMOVAC.constants.getProperty("Leaf_AQ_Amax"));
+		phi  = Double.valueOf(WIMOVAC.constants.getProperty("Leaf_AQ_phi"));
+		theta = Double.valueOf(WIMOVAC.constants.getProperty("Leaf_AQ_theta"));
+//System.out.println("0: Am:"+Amax+" phi:"+phi+" theta:"+theta+" A:"+A+" PPFD:"+PAR+" T:"+T);
+		// adjust Amax first. 
+		
+		
+	//	boolean runGrowthModel = false;
+		
+		// when run for whole season, use N to predict Amax and phi. 
+		if(Constants.runGrowthModel)
+		N_adj_Amax_phi();
+		
+		
+//System.out.println("1: Am:"+Amax+" phi:"+phi+" theta:"+theta+" A:"+A+" PPFD:"+PAR+" T:"+T);
+		// adjust by temperature based on N-adjusted Amax and phi. 
+		
+		Temperature_adj_Amax_phi();
+		
+		// use AQ curve model to calculate Pn. 
+		// PN ~ (PAR * phi + Amax - sqrt((phi * PAR + Amax)^2 - 4 * theta * phi * PAR * Amax))/(2 * theta)
+		
+		
+		A = (PAR * phi + Amax - Math.sqrt((phi * PAR + Amax)*(phi * PAR + Amax) - 4 * theta * phi * PAR * Amax))/(2 * theta);  
+		
+		
+		// A is photosynthesis only, not including Rd. 
+//System.out.println("2: Am:"+Amax+" phi:"+phi+" theta:"+theta+" A:"+A+" PPFD:"+PAR+" T:"+T);
+	}    
+	
+	private void N_adj_Amax_phi(){
+		
+		int stage = Constants.stage;
+		if (stage>=0){
+
+			Nleaf = Constants.LeafNperArea[stage]; // this value is input from GUI to WIMOVAC.constants and in Plant(), it is restored to Constants
+		}
+		
+		// *** N % **** //
+	//	Amax = 5.8736 * Nleaf - 5.9267; // R2 = 0.8132, the unit of Nleaf is %, usually 2.3~5.3%
+	//	phi  = 0.005  * Nleaf + 0.0185; // R2= 0.3148. 
+		
+		// *** N per leaf area *** //
+		Amax = 0.16811* Nleaf - 18.621;   // unit: Nleaf is g/m2
+		                                  // function of phi calculation from Nleaf
+		phi = 0.2018 * Nleaf/1000 - 0.0045; // unit: Nleaf is g/m2	
+		
+		
+		
+	}     
+	
+	private void Temperature_adj_Amax_phi(){
+		
+		Amax = (-0.0433* T*T + 2.2774 *T - 5.9541) / (-0.0433* 25*25 + 2.2774 *25 - 5.9541) * Amax; // R2 = 0.9993, data from Yamori, W., et al. (2014). Xiurong
+		phi = (-0.001*T + 0.084) / (-0.001*25 + 0.084) * phi; //R2= 1 , data from Ehleringer, J. and R. W. Pearcy (1983). Xiurong
+		
+	}
+	
+	
+	
 	// not used.
-	public void cal_temperature_adj_c4() {
+	private void cal_temperature_adj_c4() {
 
 		double KQ10 = Math.pow(Double.valueOf(WIMOVAC.constants.getProperty("Q10_Coefficient")), ((T - 25) / 10));
 		Vpmax = 0;
@@ -139,11 +220,11 @@ public class Leaf extends Organ {
 
 	}
 
-	public void cal_assimilation_c4() {
+	private void cal_assimilation_c4() {
 
 	}
 
-	public void cal_stomatal_c4() {
+	private void cal_stomatal_c4() {
 
 	}
 

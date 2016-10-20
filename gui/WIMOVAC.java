@@ -8,7 +8,7 @@ package gui;
  * 
  * This is the main file for WIMOVAC
  * 
- * @author Dairui Chen
+ * @author Dairui Chen, Qingfeng Song
  * 
  */
 
