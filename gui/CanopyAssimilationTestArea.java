@@ -32,7 +32,7 @@ public class CanopyAssimilationTestArea extends JPanel implements ActionListener
     private LabelTextfieldGroup tf1;
     private JRadioButton rb1, rb2;
     private CheckBoxGroup cb;
-    private JButton C3,start,parameterfile;
+    private JButton C3,start,parameterfile; 
    
     //constructor
     public CanopyAssimilationTestArea() {

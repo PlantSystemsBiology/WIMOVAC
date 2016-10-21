@@ -239,7 +239,7 @@ public class Canopy extends CanopyProperties{
    		priestly_potential_E 	= sunlit_leaf.priestly_potential_E 	+ shaded_leaf.priestly_potential_E;
    		T 						= sunlit_leaf.T 					+ shaded_leaf.T;
    		
-	}
+	}  
 	
 	
 
