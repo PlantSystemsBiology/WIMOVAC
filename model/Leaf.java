@@ -154,8 +154,7 @@ public class Leaf extends Organ {
 		if(Constants.runGrowthModel)
 		N_adj_Amax_phi();
 		
-		
-//System.out.println("1: Am:"+Amax+" phi:"+phi+" theta:"+theta+" A:"+A+" PPFD:"+PAR+" T:"+T);
+	
 		// adjust by temperature based on N-adjusted Amax and phi. 
 		
 		Temperature_adj_Amax_phi();
@@ -189,7 +188,7 @@ public class Leaf extends Organ {
 		phi = 0.2018 * Nleaf/1000 - 0.0045; // unit: Nleaf is g/m2	
 		
 		
-		
+
 	}     
 	
 	private void Temperature_adj_Amax_phi(){
