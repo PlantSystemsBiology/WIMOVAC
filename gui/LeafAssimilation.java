@@ -11,21 +11,26 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.jfree.data.xy.XYSeriesCollection;
 import function.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import model.*;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.io.OutputStreamWriter;
 
 public class LeafAssimilation extends JPanel implements ActionListener, ItemListener {
-       
+
     private static final long serialVersionUID = 1L;
 
-    private JButton C3,start,parameterfile;
+    private JButton C3,start,saveR,parameterfile;
 
     private LabelTextfieldGroup tf1, tf2, tf3;
     
@@ -114,6 +119,11 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -130,8 +140,9 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addComponent(panel3)
                 .addComponent(panel4)    
                 .addGroup(layout.createSequentialGroup()    
-            //        .addComponent(C3)
+                    .addComponent(C3)
                     .addComponent(start)  
+                    .addComponent(saveR)
                     .addComponent(parameterfile)               
                 )
         );
@@ -142,8 +153,9 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
                 .addComponent(panel3)
                 .addComponent(panel4)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-            //      .addComponent(C3)
+                  .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                   .addComponent(parameterfile) 
                 )
          );        
@@ -189,7 +201,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
 
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -266,7 +278,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -342,7 +354,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         RunLeafModel rlm = new RunLeafModel();
         final XYSeriesCollection c = new XYSeriesCollection();              
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -418,7 +430,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -496,7 +508,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         JFrame result = null;
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -570,7 +582,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         title = title.concat(" plant)");
         JFrame result = null;
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Leaf.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Leaf.csv")),true);              
            
                                 
             for (int n = 0; n<3; n++){
@@ -632,26 +644,82 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
               
            }
            if ( text.equals("   Start   ")) {
-               if(radio1.isSelected(0)){
-                   if(radio3.isSelected(1))
-                        calculationLight_CO2loop();  
-                   else if(radio3.isSelected(2))
-                        calculationLight_Temloop(); 
-               }
-               if(radio1.isSelected(1)){
-                   if(radio3.isSelected(0))       
-                        calculationCO2_Lightloop(); 
-                   else if(radio3.isSelected(2))
-                        calculationCO2_Temloop(); 
-               }
-               if(radio1.isSelected(2)){
-                   if(radio3.isSelected(0)) {
-                        calculationTem_Lightloop();  
+        	   
+        	   if (isAllFilled()){
+        		   if(radio1.isSelected(0)){
+                       if(radio3.isSelected(1))
+                            calculationLight_CO2loop();  
+                       else if(radio3.isSelected(2))
+                            calculationLight_Temloop(); 
                    }
-                    else if(radio3.isSelected(1))
-                        calculationTem_CO2loop(); 
-               }
+                   if(radio1.isSelected(1)){
+                       if(radio3.isSelected(0))       
+                            calculationCO2_Lightloop(); 
+                       else if(radio3.isSelected(2))
+                            calculationCO2_Temloop(); 
+                   }
+                   if(radio1.isSelected(2)){
+                       if(radio3.isSelected(0)) {
+                            calculationTem_Lightloop();  
+                       }
+                        else if(radio3.isSelected(1))
+                            calculationTem_CO2loop(); 
+                   }
+        	   }else{
+        		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");
+        	   }
+        		   
+               
            } 
+           
+
+           if (text.equals("Save Results")) {
+
+
+        	 //SAVE to a user choose file. 
+    	    	JFileChooser fc;
+    	    	if(WIMOVAC.ResultDirOpened){
+    	    		fc = new JFileChooser(WIMOVAC.ResultDir);
+    	    	}else{
+    	    		String current="";
+    				try {
+    					current = new File( "." ).getCanonicalPath();
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    					fc = new JFileChooser();
+    				}
+        			fc = new JFileChooser(current);
+    	    	}
+
+          	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          		        ".csv", "csv");
+          	   fc.setFileFilter(filter);
+          	   int returnVal = fc.showSaveDialog(getParent());
+          	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+          	       System.out.println("You chose to open this file: " +
+          	            fc.getSelectedFile().getAbsoluteFile());
+          	       
+          	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+          	       if(!Absolutefilename.endsWith(".csv")){
+          	    	   Absolutefilename = Absolutefilename.concat(".csv");
+          	    	   
+          	       }
+          	     WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
+        	     WIMOVAC.ResultDirOpened = true;
+          	     try {
+					copy("temp/WIMOVAC_OutputFile_Leaf.csv",Absolutefilename);
+				} catch (IOException e3) {
+					// TODO Auto-generated catch block
+					e3.printStackTrace();
+				}
+
+          	    }
+        	   
+           }
+           
+           // QIngfeng add
+           
            if (text.equals("Light_0 (umol.m-2.s-1)") ) {
         	   
                radio3.disable(0);
@@ -781,6 +849,20 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         frame.setLocationRelativeTo(null); //center it
         frame.setSize(500,550);
         frame.setVisible(true);
+    }
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
+    
+
+    private boolean isAllFilled(){
+    	if (WIMOVAC.constants.isEmpty())
+    		return false;
+    	else
+    		return true;
     }
     
     

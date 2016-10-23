@@ -11,20 +11,23 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.GroupLayout;
-import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.data.xy.XYSeriesCollection;
 import function.*;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import model.*;
 
 public class CanopyMicroclimate extends JPanel implements ActionListener, ItemListener {
-       
+
     /**
 	 * 
 	 */
@@ -32,7 +35,7 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
 	private LabelTextfieldGroup tf1;
     private JRadioButton rb1, rb2;
     private CheckBoxGroup cb;
-    private JButton C3,start;
+    private JButton C3,start,saveR;
     //constructor
     public CanopyMicroclimate() {
 
@@ -97,6 +100,11 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
         start.setBorder(raisedbevel);
         start.addActionListener(this);
         
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+        
         GroupLayout layout = new GroupLayout(this);
         setLayout(layout);
         layout.setAutoCreateGaps(true);
@@ -106,8 +114,9 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
                 .addComponent(north)
                 .addComponent(center)
                 .addGroup(layout.createSequentialGroup()    
-            //        .addComponent(C3)
+                    .addComponent(C3)
                     .addComponent(start)  
+                    .addComponent(saveR)
                 )
         );
         
@@ -115,8 +124,9 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
                 .addComponent(north)
                 .addComponent(center)
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-          //        .addComponent(C3)
+                  .addComponent(C3)
                   .addComponent(start)
+                  .addComponent(saveR)
                 )
          );      
              
@@ -231,7 +241,7 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
         
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_CanopyMicroclimate.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_CanopyMicroclimate.csv")),true);              
              pw1.println("Time (hour), Direct sunlight (micro mol.m-2.s-1),Diffuse sunlight (micro mol.m-2.s-1),Light at sunlit leaves(micro mol.m-2.s-1),Light at shaded leaves(micro mol.m-2.s-1), Light scattered by leaves(micro mol.m-2.s-1)," 
             		 +"Solar zenith angle (degree),LAI at sunlit leaves (m2.m-2),LAI at shaded leaves (m2.m-2), Air temperature (oC)");
              int number=mcr.xys_PPFD_sunlit.getItemCount();
@@ -258,8 +268,58 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
               Constants.C3orC4="C3";
            }
            if (text.equals("   Start   ")) {
-              calculation();
+        	   if (isAllFilled()){ 
+        		   calculation();
+        	   }else{
+        		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");
+        	   }
            }
+           if (text.equals("Save Results")) {
+
+
+          	 //SAVE to a user choose file. 
+      	    	JFileChooser fc;
+      	    	if(WIMOVAC.ResultDirOpened){
+      	    		fc = new JFileChooser(WIMOVAC.ResultDir);
+      	    	}else{
+      	    		String current="";
+    				try {
+    					current = new File( "." ).getCanonicalPath();
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    					fc = new JFileChooser();
+    				}
+        			fc = new JFileChooser(current);
+      	    	}
+
+            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            		        ".csv", "csv");
+            	   fc.setFileFilter(filter);
+            	   int returnVal = fc.showSaveDialog(getParent());
+            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+            	       System.out.println("You chose to open this file: " +
+            	            fc.getSelectedFile().getAbsoluteFile());
+            	       
+            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+            	       if(!Absolutefilename.endsWith(".csv")){
+            	    	   Absolutefilename = Absolutefilename.concat(".csv");
+            	    	   
+            	       }
+            	       WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
+              	     WIMOVAC.ResultDirOpened = true;
+            	     try {
+  					copy("temp/WIMOVAC_OutputFile_CanopyMicroclimate.csv",Absolutefilename);
+  				} catch (IOException e3) {
+  					// TODO Auto-generated catch block
+  					e3.printStackTrace();
+  				}
+
+            	    }
+          	   
+             }
+             
+             // QIngfeng add
     }
     //handle item change events from all the components
     public void itemStateChanged(ItemEvent e) {
@@ -294,4 +354,16 @@ public class CanopyMicroclimate extends JPanel implements ActionListener, ItemLi
         frame.setSize(650,550);
         frame.setVisible(true);
     }     
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
+    private boolean isAllFilled(){
+    	if (WIMOVAC.constants.isEmpty())
+    		return false;
+    	else
+    		return true;
+    }
 }

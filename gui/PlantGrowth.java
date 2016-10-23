@@ -12,25 +12,26 @@ import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.BorderFactory; 
-import javax.swing.JTabbedPane;
-import javax.swing.GroupLayout;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jfree.data.xy.XYSeriesCollection;
 
 import function.*;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import model.*;
 
 public class PlantGrowth extends JPanel implements ActionListener, ItemListener {
-       
+
     private LabelTextfieldGroup tf1;
-    private JButton weather,C3,Start,Stop,parameterfile;
+    private JButton weather,C3,Start,Stop,saveR,parameterfile;
     private RadioButtonGroup rbg1;
     private CheckBoxGroup cb1,cb2,cb3,cb4,cb5;
 
@@ -188,6 +189,12 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         Stop.setBorder(raisedbevel);
         Stop.addActionListener(this);
         
+
+        saveR=new JButton("Save Results");
+        saveR.setFont(f1);
+        saveR.setBorder(raisedbevel);
+        saveR.addActionListener(this);
+        
         parameterfile=new JButton("Parameter File");
         parameterfile.setFont(f1);
         parameterfile.setBorder(raisedbevel);
@@ -206,6 +213,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
                     .addComponent(C3)
                     .addComponent(Start)
                     .addComponent(Stop)  
+                    .addComponent(saveR)
                     .addComponent(parameterfile)
                 )
         );
@@ -218,6 +226,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
                  .addComponent(C3)
                  .addComponent(Start)
                  .addComponent(Stop)
+                 .addComponent(saveR)
                  .addComponent(parameterfile)
                 )
          );        
@@ -467,7 +476,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         
         
         try {
-             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("OutputFile_Plant.csv")),true);              
+             PrintWriter pw1=new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/WIMOVAC_OutputFile_Plant.csv")),true);              
              
              pw1.println("Time (day), Net assimilation rate (mol.m-1.day-1), Elapsed assimilation rate (mol.m-2), Canopy conductance (mol.m-2.day-1), Evapo/Transpiration (mol.m-2.day-1), Cumulative evapo/transpiration (mol.m-2), leaf area index (m2.m-2),"        
             		 +"Air temperature (oC), Daily mean temperature (oC), Daily highest temperature (oC), Daily lowest temperature (oC), Elapsed thermal time (days), Elapased thermal time (hours), Relative Humidity, "
@@ -503,8 +512,59 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
               Constants.C3orC4="C3";
            }
            if (text.equals("   Start   ")) {
-              calculation();
+        	   if (isAllFilled()){
+        		   calculation();
+        	   }else{
+        		   JOptionPane.showMessageDialog(null, "No parameters for model ! \n You Can OPEN a parameter file from WIMVOAC or directly input from 'Parameter File'");
+        	   }
            }   
+           if (text.equals("Save Results")) {
+
+
+          	 //SAVE to a user choose file. 
+      	    	JFileChooser fc;
+      	    	if(WIMOVAC.ResultDirOpened){
+      	    		fc = new JFileChooser(WIMOVAC.ResultDir);
+      	    	}else{
+      	    		String current="";
+    				try {
+    					current = new File( "." ).getCanonicalPath();
+    				} catch (IOException e1) {
+    					// TODO Auto-generated catch block
+    					e1.printStackTrace();
+    					fc = new JFileChooser();
+    				}
+        			fc = new JFileChooser(current);
+      	    	}
+
+            	   FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            		        ".csv", "csv");
+            	   fc.setFileFilter(filter);
+            	   int returnVal = fc.showSaveDialog(getParent());
+            	   if(returnVal == JFileChooser.APPROVE_OPTION) {
+            	       System.out.println("You chose to open this file: " +
+            	            fc.getSelectedFile().getAbsoluteFile());
+            	       
+            	       String Absolutefilename = fc.getSelectedFile().getAbsolutePath();
+            	       if(!Absolutefilename.endsWith(".csv")){
+            	    	   Absolutefilename = Absolutefilename.concat(".csv");
+            	    	   
+            	       }
+            	       WIMOVAC.ResultDir = fc.getSelectedFile().getParent();
+              	     WIMOVAC.ResultDirOpened = true;
+            	     try {
+  					copy("temp/WIMOVAC_OutputFile_Plant.csv",Absolutefilename);
+  				} catch (IOException e3) {
+  					// TODO Auto-generated catch block
+  					e3.printStackTrace();
+  				}
+
+            	    }
+          	   
+             }
+             
+             // QIngfeng add
+           
            if (text.equals("Parameter File")) {
                ParameterFile pf=new ParameterFile(3);
                pf.customerFrame();
@@ -542,6 +602,18 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         frame.setSize(700,600);
         frame.setVisible(true);
     }  
+    public static void copy(String sourcePath, String destinationPath) throws IOException {
+    	File f3 = new File(destinationPath);
+    	FileOutputStream fs = new FileOutputStream(f3);
+        Files.copy(Paths.get(sourcePath), fs);
+        fs.close();
+    }
+    private boolean isAllFilled(){
+    	if (WIMOVAC.constants.isEmpty())
+    		return false;
+    	else
+    		return true;
+    }
 }
 
 
