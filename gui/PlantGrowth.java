@@ -30,7 +30,11 @@ import model.*;
 
 public class PlantGrowth extends JPanel implements ActionListener, ItemListener {
 
-    private LabelTextfieldGroup tf1;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private LabelTextfieldGroup tf1;
     private JButton weather,C3,Start,Stop,saveR,parameterfile;
     private RadioButtonGroup rbg1;
     private CheckBoxGroup cb1,cb2,cb3,cb4,cb5;
@@ -43,7 +47,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         Border raisedbevel=BorderFactory.createRaisedBevelBorder();
         Font f1=new Font("Times New Roman", Font.BOLD, 20);
         
-        
+                
         JPanel north=new JPanel();
         TitledBorder titledborder = BorderFactory.createTitledBorder(loweredbevel);
         north.setBorder(titledborder);
@@ -54,6 +58,25 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         tf1=new LabelTextfieldGroup(6,title1,default1);
         north.add(tf1.createHorizontalLabelTextfieldGroup());
          
+        // selection of leaf senescence model
+        JPanel panel0 = new JPanel (new FlowLayout());
+     //   JPanel panel1=new JPanel(new FlowLayout());  
+        TitledBorder titledborder0 = BorderFactory.createTitledBorder(loweredbevel,"Senescence Model");
+        panel0.setBorder(titledborder0);
+ //       panel0.setToolTipText();
+        
+        String title_model[]={"Use Thermal Time Senescence", "Use Leaf Senescence Rate"};
+        
+        RadioButtonGroup radio_model;
+              
+        radio_model = new RadioButtonGroup(2,title_model);
+        panel0.add(radio_model.createRadioButtonGroup());
+        radio_model.rb[0].addActionListener(this);
+        radio_model.rb[1].addActionListener(this);
+        radio_model.setDefault(1);
+        
+       
+        
         JPanel south=new JPanel();
         south.setBorder(titledborder);
         
@@ -207,8 +230,10 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         
         layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)          
                 .addComponent(north)
+                .addComponent(panel0)
           //      .addComponent(weather)                          
                 .addComponent(south)
+                
                 .addGroup(layout.createSequentialGroup()    
                     .addComponent(C3)
                     .addComponent(Start)
@@ -220,8 +245,10 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         
         layout.setVerticalGroup(layout.createSequentialGroup()         
                .addComponent(north)
+               .addComponent(panel0)
          //      .addComponent(weather)
                .addComponent(south)
+               
                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                  .addComponent(C3)
                  .addComponent(Start)
@@ -503,6 +530,16 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
     public void actionPerformed(ActionEvent e) {
         
            String text = (String)e.getActionCommand();
+           
+           if (text.equals("Use Thermal Time Senescence")) {
+        	   Constants.LeafSenescenceModel = 0;
+
+           }
+           if (text.equals("Use Leaf Senescence Rate")){
+        	   Constants.LeafSenescenceModel = 1;
+           }
+           
+           
            if (text.equals("   C3   ")) {
               C3.setText("   C4   ");
               Constants.C3orC4="C4";
@@ -601,7 +638,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         //Display the window
         frame.pack();
         frame.setLocationRelativeTo(null); //center it
-        frame.setSize(700,600);
+        frame.setSize(700,700);
         frame.setVisible(true);
     }  
     public static void copy(String sourcePath, String destinationPath) throws IOException {

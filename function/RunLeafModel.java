@@ -61,7 +61,7 @@ public class RunLeafModel {
 			leaf.Cs = CO2;
 			env.air.CO2_concentration = CO2;
 			if("C3".equals(Constants.C3orC4)){
-                            System.out.println("leaf.PPFD "+leaf.PPFD);
+             //               System.out.println("leaf.PPFD "+leaf.PPFD);
 				leaf.cal_c3(env);
                         }
 			else if("C4".equals(Constants.C3orC4))

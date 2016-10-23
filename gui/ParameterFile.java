@@ -289,6 +289,15 @@ public class ParameterFile extends JPanel implements ActionListener{
 	        //
 	        PlantLevelparameters.add("TotalNumGrowingStages");
 	        
+	        //
+	        PlantLevelparameters.add("Init_DW_leaf");
+	        PlantLevelparameters.add("Init_DW_stem");
+	        PlantLevelparameters.add("Init_DW_s_root");
+	        PlantLevelparameters.add("Init_DW_f_root");
+	        PlantLevelparameters.add("Init_DW_seed");
+	        PlantLevelparameters.add("Init_DW_storage_organ");
+
+
 	        // 
 	        PlantLevelparameters.add("DegDayEndStage1");
 	        PlantLevelparameters.add("DegDayEndStage2");
@@ -322,6 +331,20 @@ public class ParameterFile extends JPanel implements ActionListener{
 	        PlantLevelparameters.add("FRootLeafDeathThermalTime");
 	        PlantLevelparameters.add("PodDeathThermalTime");
 
+	        //
+	        PlantLevelparameters.add("LeafSenescenceRate_stage1");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage2");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage3");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage4");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage5");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage6");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage7");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage8");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage9");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage10");
+	        PlantLevelparameters.add("LeafSenescenceRate_stage11");
+	        
+	        
 	        
 			// Plant height and leaf width
 	        PlantLevelparameters.add("GrowthRespirationCoef");

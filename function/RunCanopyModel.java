@@ -23,7 +23,7 @@ public class RunCanopyModel {
 			
 			Canopy canopy = new Canopy();
                         canopy.LAI = Double.valueOf(WIMOVAC.constants.getProperty("LeafAreaIndex"));
-                        System.out.println("update LAI: "+canopy.LAI);
+                 //       System.out.println("update LAI: "+canopy.LAI);
 			canopy.CanopyMicroClimateDriver(env, leaf);						//calculate the canopy micro-climate factors
 			canopy.CanopyAssimilationDriver(env);							//calculate the canopy photosynthesis and transpiration
 			

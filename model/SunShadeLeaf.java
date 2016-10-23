@@ -43,7 +43,7 @@ public class SunShadeLeaf extends CanopyProperties {
  //       System.out.println("Leaf A: " + A);
         
         CO2_uptake_rate = A  * LAI;
-        System.out.println("A: "+A+"; LAI:"+LAI+"; SunShA: "+CO2_uptake_rate);
+   //     System.out.println("A: "+A+"; LAI:"+LAI+"; SunShA: "+CO2_uptake_rate);
         
         cond 			= Gs * LAI;
 // ???

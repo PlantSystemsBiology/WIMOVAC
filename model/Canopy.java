@@ -103,7 +103,7 @@ public class Canopy extends CanopyProperties{
 	    }
 	    
 	    // Calculate Fsun, the sunlit leaf area index.
-            System.out.println("LAI here: "+LAI);
+   //         System.out.println("LAI here: "+LAI);
 	    double SUNLITLEAVESLAI = (1 - Math.exp(-canopy_extinction_coef * LAI/ Cossolarzenithangle)) 
 	                             * Cossolarzenithangle / canopy_extinction_coef;
 
@@ -241,7 +241,6 @@ public class Canopy extends CanopyProperties{
    		
 	}
 	
-	
-
-
 }
+
+

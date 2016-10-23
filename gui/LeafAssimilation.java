@@ -57,6 +57,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         panel0.add(radio_model.createRadioButtonGroup());
         radio_model.rb[0].addActionListener(this);
         radio_model.rb[1].addActionListener(this);
+        radio_model.setDefault(1);
         
         useTemperatureResponse = new Checkbox("Use temperature response");
         useTemperatureResponse.setState(true);
@@ -879,7 +880,7 @@ public class LeafAssimilation extends JPanel implements ActionListener, ItemList
         //Display the window
         frame.pack();
         frame.setLocationRelativeTo(null); //center it
-        frame.setSize(500,550);
+        frame.setSize(500,650);
         frame.setVisible(true);
     }
     public static void copy(String sourcePath, String destinationPath) throws IOException {

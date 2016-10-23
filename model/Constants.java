@@ -10,7 +10,8 @@ public class Constants {
 	
 	static public int stage = 0; 
 	static public double [] LeafNperArea = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
-	
+	static public double [] LeafSenescenceRate = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+	static public int LeafSenescenceModel = 1;
 	
 	
 	
@@ -35,7 +36,7 @@ public class Constants {
 	static public String plantFile="original";
 	
 	static public String C3orC4 = "C3";
-	static public boolean UseAQ = false;
+	static public boolean UseAQ = true;
 	static public boolean runGrowthModel = false;
 	
  	static public double RealGasConstant  = 8.314;

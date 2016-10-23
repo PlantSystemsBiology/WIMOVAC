@@ -54,10 +54,23 @@ public class Plant{
     
 
 	public Plant(){
+		
+		
+		leaf.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_leaf"));
+		stem.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_stem"));
+		s_root.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_s_root"));
+		f_root.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_f_root"));
+		
+		seed.dry_weight = 1; // seed has a default 
+		seed.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_seed"));
+		
+		storage_organ.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_storage_organ"));
+		
+		
 		canopy.LAI = 0.0001;
 		canopy.shaded_leaf.LAI = 0.0001;
 		canopy.sunlit_leaf.LAI = 0.0001;
-		seed.dry_weight = 1;
+		
 		leaf.thermalTimeDeath = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafDeathThermalTime"));//1200;				// the thermal days of death for leaf
 		stem.thermalTimeDeath = (double)Double.valueOf(WIMOVAC.constants.getProperty("StemDeathThermalTime"));//2500;				// raw parameter is hour, convert to day (QF)
 		s_root.thermalTimeDeath = (double)Double.valueOf(WIMOVAC.constants.getProperty("SRootDeathThermalTime"));//3000;
@@ -92,6 +105,17 @@ public class Plant{
     	Constants.LeafNperArea[9] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage10"));
     	Constants.LeafNperArea[10] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage11"));
     	
+    	Constants.LeafSenescenceRate[0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage1"));
+    	Constants.LeafSenescenceRate[1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage2"));
+    	Constants.LeafSenescenceRate[2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage3"));
+    	Constants.LeafSenescenceRate[3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage4"));
+    	Constants.LeafSenescenceRate[4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage5"));
+    	Constants.LeafSenescenceRate[5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage6"));
+    	Constants.LeafSenescenceRate[6] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage7"));
+    	Constants.LeafSenescenceRate[7] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage8"));
+    	Constants.LeafSenescenceRate[8] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage9"));
+    	Constants.LeafSenescenceRate[9] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage10"));
+    	Constants.LeafSenescenceRate[10] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage11"));
     	
     //  leaf   stem  sroot froot stor pod   seed
     	Constants.RelPartition[0][0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("RelPartition_stage1_leaf"));
@@ -196,12 +220,13 @@ public class Plant{
 		calDailyCarbonUptake (ct, lct, env);		//daily CO2 uptake of plant canopy
 
 		calGrowthStage(ct);					//determine stage
-		System.out.println("Stage: "+stage_of_development);
+		
+//		System.out.println("Stage: "+stage_of_development);
 		
 		
 		//Respiration ... a * daily_carbon_uptake +  b_leaf * leaf.dry_weight + b_stem * stem.dry_weight  +
 		double Rtotal =  b_root * (f_root.dry_weight + s_root.dry_weight); 
-		System.out.println("leaf.dry_weight: "  +leaf.dry_weight);
+	//	System.out.println("leaf.dry_weight: "  +leaf.dry_weight);
 		if(Rtotal<daily_carbon_uptake){
 			daily_carbon_uptake = daily_carbon_uptake - Rtotal; 
 		}else{
@@ -210,7 +235,13 @@ public class Plant{
 		
 		
 		//Qingfeng change the aging before partitioning, because the reabsorbed C can be used for partitioning at the same day.
-		calAgeing();             // Call the plant ageing and senescence driver
+		if(Constants.LeafSenescenceModel == 0){
+			calAgeing();             // Call the plant ageing and senescence driver
+		}else if(Constants.LeafSenescenceModel == 1){
+			calAgeing_leaf_senescence_rate(); // Using leaf senescence rate model
+		}
+		
+		
 		
 		if(stage_of_development>=0){
 			calPartitioning();					//partitioning
@@ -232,7 +263,7 @@ public class Plant{
 		
 		updateAboveBelowBiomassTotals();   	// only for getting a result 
 		}
-		System.out.print("day="+ct.day+"; stage\t"+stage_of_development+"; dCarbup="+String.format("%1$.2f",daily_carbon_uptake)+"; LAI="+String.format("%1$.2f",canopy.LAI));
+//		System.out.print("day="+ct.day+"; stage\t"+stage_of_development+"; dCarbup="+String.format("%1$.2f",daily_carbon_uptake)+"; LAI="+String.format("%1$.2f",canopy.LAI));
 
 	}
 	
@@ -253,9 +284,9 @@ public class Plant{
 			ct.hour = h;
 			env.update(ct, lct);  									//set env
 			
-			System.out.println("TEST output of environmental avg_T: "+env.air.avg_T);
-			System.out.println("TEST output of environmental high_T: "+env.air.min_T);
-			System.out.println("TEST output of environmental low_T: "+env.air.max_T);
+		//	System.out.println("TEST output of environmental avg_T: "+env.air.avg_T);
+		//	System.out.println("TEST output of environmental high_T: "+env.air.min_T);
+		//	System.out.println("TEST output of environmental low_T: "+env.air.max_T);
 			
 			//	leaf.T = 25; // TEMP
 			leaf.T = env.air.current_T;  									//set leaf T
@@ -281,7 +312,7 @@ public class Plant{
 		}
 		
 		elapsed_thermal_days +=  today_thermal_hours / 24;          		// unit is: temperature * day
-		System.out.println("themalDays: " + elapsed_thermal_days);
+	//	System.out.println("themalDays: " + elapsed_thermal_days);
 		
 	}
 	//
@@ -438,6 +469,17 @@ public class Plant{
 		if (pod		.dry_weight <0) pod		.dry_weight = 0;
 		if (storage_organ.dry_weight <0) storage_organ.dry_weight = 0;
 
+	}
+	
+	private void calAgeing_leaf_senescence_rate(){
+		// this method is used for calculating leaf senescence dry weight
+		if(stage_of_development>=0){
+			double lsr = Constants.LeafSenescenceRate[stage_of_development];
+		
+			leaf.dead_on_ground_surface += leaf.dry_weight * lsr;  //add-up everyday dead leaf on ground
+		}
+		// do not delete leaf dry weight, as dead leaf also inlcuded in the dry weight. 
+	
 	}
 	
 	private void calAgeing(){
@@ -626,12 +668,12 @@ public class Plant{
 		            pod				.partition_weight = Cgain * Constants.RelPartition[stage_of_development][5];
 		            seed			.partition_weight = Cgain * Constants.RelPartition[stage_of_development][6];
 		         
-		            System.out.print("leaf:" +String.format("%1$.2f",leaf.partition_weight));
-		            System.out.print("; stem:" +String.format("%1$.2f",stem.partition_weight)+"\t");
-		            System.out.print("; s_root:" +String.format("%1$.2f",s_root.partition_weight)+"\t");
-		            System.out.print("; f_root:" +String.format("%1$.2f",f_root.partition_weight)+"\t");
-		            System.out.print("; storage:" +String.format("%1$.2f",storage_organ.partition_weight)+"\t");
-		            System.out.println("; seed:" +String.format("%1$.2f",seed.partition_weight)+"\t");
+		   //         System.out.print("leaf:" +String.format("%1$.2f",leaf.partition_weight));
+		   //         System.out.print("; stem:" +String.format("%1$.2f",stem.partition_weight)+"\t");
+		   //         System.out.print("; s_root:" +String.format("%1$.2f",s_root.partition_weight)+"\t");
+		   //         System.out.print("; f_root:" +String.format("%1$.2f",f_root.partition_weight)+"\t");
+		   //         System.out.print("; storage:" +String.format("%1$.2f",storage_organ.partition_weight)+"\t");
+		   //         System.out.println("; seed:" +String.format("%1$.2f",seed.partition_weight)+"\t");
 		            
 		            
 		            //   System.out.println("Cgain\t"+Cgain+"\tRelPart\t"+Constants.RelPartition[stage_of_development][0]+"\tLeafPW0: \t"+leaf.partition_weight);
