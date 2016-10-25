@@ -12,39 +12,59 @@ public class Canopy extends CanopyProperties{
 	public double 	scatter_light_temp;
 	public int 		extinction_Calc_Switch;
 
+	// ** checked ! ** //
 	public void updateCanopyStructure(Stem stem, Leaf leaf){
 		/*
 		 * update canopy height and LAI
 		 */
-		
-		// update the canopy height by calculate it with stem length and planting density
-	    switch (Constants.InitialCanopyHeightSwitch) {
-	    case 0:
-	            // Model parameter database indicates that the canopy height should be set to the
-	            // constant initial canopy height
-	        break;
-	    case 1:
-	            // Model parameter database indicates that the canopy height should be calculated from
+	            // The canopy height should be calculated from
 	            // the total stem length per metre square of ground and the number of plants per metre square
-	        canopy_height = stem.L / Constants.PlantingDensity;
-	        break;
-	    }
+	        canopy_height = stem.L / Constants.PlantingDensity; 
 	    
 	    // update LAI
 	    double ground_area = 1;                           //QF set, 1 m2, because all the other unit is per ground area
+	    
 	    LAI = leaf.LA / ground_area ;
 	}
+	
+	
 	/*
 	 * calculate the canopy assimilation rate and canopy transpiration rate
-	 */
+	 */ 
+	// ** checked! ** //
 	public void CanopyAssimilationDriver(Environment env)  {
-        if (LAI>0.00001)
-        	CalcCanopyIterativeRoutine(env);
+		
+		if (LAI<0.0001)
+			return;
+
+
+		// photosynthesis part //
+		
+	    sunlit_leaf.calSunShadeCO2UptakeRate(env);
+	    shaded_leaf.calSunShadeCO2UptakeRate(env);
+		
+		cond 			= (sunlit_leaf.cond * sunlit_leaf.LAI + shaded_leaf.cond * shaded_leaf.LAI)/(sunlit_leaf.LAI + shaded_leaf.LAI);
+	    CO2_uptake_rate = sunlit_leaf.CO2_uptake_rate 	+ shaded_leaf.CO2_uptake_rate;
+	    System.out.println("A_sunlit: "+sunlit_leaf.CO2_uptake_rate+ "  A_shaded: "+shaded_leaf.CO2_uptake_rate);
+
+
+	    // transpiration part // 
+	    
+	    sunlit_leaf.CalcSunShadeTranspiration(env);
+   		shaded_leaf.CalcSunShadeTranspiration(env);
+   		
+   		// * canopy values = sunlit value + shaded value * //
+   		actual_canopy_E 		= sunlit_leaf.actual_canopy_E 		+ shaded_leaf.actual_canopy_E;
+   		penman_potential_E 		= sunlit_leaf.penman_potential_E 	+ shaded_leaf.penman_potential_E;
+   		priestly_potential_E 	= sunlit_leaf.priestly_potential_E 	+ shaded_leaf.priestly_potential_E;
+   		T 						= sunlit_leaf.T 					+ shaded_leaf.T;
+   		
     }
 	
 	/*
 	 * calculate the microClimate in canopy
 	 */
+	
 	public void CanopyMicroClimateDriver(Environment env, Leaf leaf) {
         // This is the Canopy microclimate driver main subroutine
         // Each main component should consist of a number of calls to smaller modules of related functions.
@@ -53,27 +73,30 @@ public class Canopy extends CanopyProperties{
         // This may help to speed up the growth model prior to germination
         if (LAI > 0) {
         	
-        	calSunShadeCs_Os_RH_Tair(env);
+        	sunlit_leaf.Cs = env.air.CO2_concentration;
+    		shaded_leaf.Cs = env.air.CO2_concentration;
+    		
+    		sunlit_leaf.Os = env.air.O2_concentration;
+    		shaded_leaf.Os = env.air.O2_concentration;
+    		
+    		sunlit_leaf.RH = env.air.RH;
+    		shaded_leaf.RH = env.air.RH;
+    		
+    		sunlit_leaf.Tair = env.air.current_T;
+    		shaded_leaf.Tair = env.air.current_T;
+    		
+    		
         	calcSunShadeLight_and_LAI(env, leaf);    // Calculate the Proportion of sunlit foliage in terms of LAI
-            CalcCanopyVcmaxJmax(leaf);       // Set Vcmax and Jmax values for sunlit/shaded leaves
+   		 	
+        	
+        	sunlit_leaf.calSunShadeVcmaxJmax(leaf);
+   		 	shaded_leaf.calSunShadeVcmaxJmax(leaf);
         }
 	}
 	
-	private void calSunShadeCs_Os_RH_Tair(Environment env){
-		sunlit_leaf.Cs = env.air.CO2_concentration;
-		shaded_leaf.Cs = env.air.CO2_concentration;
-		
-		sunlit_leaf.Os = env.air.O2_concentration;
-		shaded_leaf.Os = env.air.O2_concentration;
-		
-		sunlit_leaf.RH = env.air.RH;
-		shaded_leaf.RH = env.air.RH;
-		
-		sunlit_leaf.Tair = env.air.current_T;
-		shaded_leaf.Tair = env.air.current_T;
-		
-	}
 	
+	
+	// ** checked ! ** //
 	private void calcSunShadeLight_and_LAI(Environment env, Leaf leaf) {
 		
 	//	LAI = leaf.LA / 1; // the area of ground is 1 m2, here the LAI of total canopy is re-calcualted from the area of leaf
@@ -141,8 +164,14 @@ public class Canopy extends CanopyProperties{
 	    sunlit_leaf.PPFD 	= SunlitLeafPhotonFlux;
 	    shaded_leaf.PPFD 	= ShadedLeafPhotonFlux;
 	    scatter_light_temp 	= ScatteredPhotonFlux;  
-
+	    
+	    System.out.println("sunlit light: "+sunlit_leaf.PPFD +" LAI: "+sunlit_leaf.LAI);
+	    System.out.println("shaded light: "+shaded_leaf.PPFD +" LAI: "+shaded_leaf.LAI);
+	    
+	    
 	    }
+	
+	
 	 private double SphericalLeafExtincCoef(double HoriztoVerticalRatio, double SolarZenithAngle) {
 
 	        /*This function calculates a canopy extinction coefficient/foliar absorption coefficient
@@ -164,82 +193,6 @@ public class Canopy extends CanopyProperties{
 	            return Math.abs(ExtinctionCoef); //Return the function result
 	   }
 	 
-	 private void CalcCanopyVcmaxJmax(Leaf leaf) {
-		 sunlit_leaf.calSunShadeVcmaxJmax(leaf);
-		 shaded_leaf.calSunShadeVcmaxJmax(leaf);
-	 }
-
-	 private void CalcCanopyIterativeRoutine(Environment env)  {
-	        /*  
-	          The canopy assimilation routine below has been modified to include a call
-	          to the transpiration module where a canopy energy budget calculation is performed.
-
-	          An iterative procedure is used to solves the effect of canopy assimilation on canopy conductance, the effect of canopy conductance
-	          on transpiration and canopy temperature and closing the circle the effect of canopy temperature on canopy assimilation.
-
-	          The microclimate routine will give a default value for canopy sunlit and shaded leaf
-	          temperatures which is used in the canopy assimilation calculations for the first calculation.
-	        */
-	       
-	       int	  LoopCounter       = 0;       // Keep track of number of iterations
-	       double ChangeTemperature = 1;  // Keep track of temperature difference between iterations
-
-	       // Repeat/Reiterate calculations until canopy temperature doesn't change or until 25 iterations have been performed.
-
-	       double old_sunlit_T = 0;
-	       double old_shaded_T = 0;
-	       
-	//       System.out.println("==================="+env.light.direct_PPFD);
-	       
-	       sunlit_leaf.T = 25; //STOP LOOP
-	       shaded_leaf.T = 25; //STOP LOOP
-	       
-	       while (ChangeTemperature > 0.1 && LoopCounter < 25) {
-	    	   
-	    	   calcCanopyCO2UptakeRate(env);
-
-	//    	   System.out.println("Ac: "+CO2_uptake_rate);
-	       		
-	       /* The canopy assimilation rate routine will have calculated the canopy conductance applicable for assimilation at the estimated temperature.
-	          Now call the transpiration routine in order to calculate the adjusted canopy temperature relevant for this stomatal conductance. Remember that
-	          the sunlit/shaded canopy model has two leaf populations with different temperatures, assimilation rates, canopy conductance and transpirations.
-	          Store old canopy temperature for reference to newly calculated value
-	       */
-	    	   old_sunlit_T = sunlit_leaf.T;
-	    	   old_shaded_T = shaded_leaf.T;
-	    	   
-	    	   calcCanopyTranspiration(env);
-	    	   
-	       		
-	       // Find which has biggest change, sunlit or shaded leaves, and use this as the basis of comparison.
-	           if( Math.abs( sunlit_leaf.T - old_sunlit_T ) > Math.abs( shaded_leaf.T - old_shaded_T ) )
-	                ChangeTemperature = Math.abs(sunlit_leaf.T - old_sunlit_T);
-	           else
-	                ChangeTemperature = Math.abs(shaded_leaf.T - old_shaded_T);
-
-	           LoopCounter++;
-	           LoopCounter = 26; //STOP LOOP
-	       }
-	}
-
-	private void calcCanopyCO2UptakeRate(Environment env){
-	    sunlit_leaf.calSunShadeCO2UptakeRate(env);
-	    shaded_leaf.calSunShadeCO2UptakeRate(env);
-		
-		cond 			= (sunlit_leaf.cond * sunlit_leaf.LAI + shaded_leaf.cond * shaded_leaf.LAI)/(sunlit_leaf.LAI + shaded_leaf.LAI);
-	    CO2_uptake_rate = sunlit_leaf.CO2_uptake_rate 	+ shaded_leaf.CO2_uptake_rate;
-	}
-	private void calcCanopyTranspiration(Environment env) {
-		sunlit_leaf.CalcSunShadeTranspiration(env);
-   		shaded_leaf.CalcSunShadeTranspiration(env);
-   		
-   		// * canopy values = sunlit value + shaded value * //
-   		actual_canopy_E 		= sunlit_leaf.actual_canopy_E 		+ shaded_leaf.actual_canopy_E;
-   		penman_potential_E 		= sunlit_leaf.penman_potential_E 	+ shaded_leaf.penman_potential_E;
-   		priestly_potential_E 	= sunlit_leaf.priestly_potential_E 	+ shaded_leaf.priestly_potential_E;
-   		T 						= sunlit_leaf.T 					+ shaded_leaf.T;
-   		
-	}
 	
 }
 

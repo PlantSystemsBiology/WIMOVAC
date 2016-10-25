@@ -8,11 +8,16 @@ public class Constants {
 	 */
 	//Qingfeng add
 	
-	static public int stage = 0; 
+	static public int stage = 0; // from 0 to 10, total 11 for maximal. 
+								 // -2: not planted
+						  		 // -1: planted, not germinated
+								 // 0: germinated and coming out. (the WIMOVAC start calculation of plant process from stage 0)
+	
 	static public double [] LeafNperArea = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
 	static public double [] LeafSenescenceRate = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	static public int LeafSenescenceModel = 1;
 	static public boolean use_weather_data = false;
+	static public boolean growthFromSeed = false;
 	
 	
 	
@@ -331,7 +336,7 @@ public class Constants {
 	
         static public int DeadMaterialInBiomassCalcSwitch;
         static public int PlantingDay                           = 100;
-        static public int[] DegDayEndStages                     = {185, 230, 260, 302, 591, 1048, 1453, 1614, 2109, 2286,  4000};//right
+        static public double[] DegDayEndStages                     = {185, 230, 260, 302, 591, 1048, 1453, 1614, 2109, 2286,  4000};//right
         static public int NumDevelopmentalStages;
     
         static public String DevelopmentalStageDescription[];  //[14]
