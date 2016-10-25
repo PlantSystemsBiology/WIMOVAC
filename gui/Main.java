@@ -1,4 +1,5 @@
 package gui;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import model.*;
@@ -65,9 +66,11 @@ public class Main {
 		}
 
 		//test plant growth
+		Weather weather = new Weather();
+		PrintWriter pw0 = null;
 		Plant plant = new Plant();
 		for (int d = 150; d<=300; d++){
-			plant.runDailyPlantProcess(ct, lct, env);
+			plant.runDailyPlantProcess(ct, lct, env, weather,pw0);
 			
 			double Ac_per_day = plant.daily_carbon_uptake;
 			double LAI = plant.canopy.LAI;

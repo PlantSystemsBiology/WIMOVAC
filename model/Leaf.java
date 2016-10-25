@@ -11,7 +11,7 @@ public class Leaf extends Organ {
 									// CO2 partial pressure, Cm: mesophyll CO2
 									// concentration for C4 model, T: leaf
 									// temperature
-	public double A, Rd, E; // A: assimilation rate, E: transpiration rate
+	public double A, Rd=0, E; // A: assimilation rate, E: transpiration rate
 	public double QY, LCP; // QY: quantum_yield
 	// leaf water potential
 	public double leafWaterPotential; // Qingfeng add
@@ -83,6 +83,7 @@ public class Leaf extends Organ {
 		
 		if(Constants.UseAQ){
 			cal_AQ(env);
+			
 		}else{
 			cal_Farquhar(env);
 		}
@@ -149,8 +150,7 @@ public class Leaf extends Organ {
 		
 		
 	//	boolean runGrowthModel = false;
-		
-		// when run for whole season, use N to predict Amax and phi. 
+	//  when run for whole season, use N to predict Amax and phi. 
 		if(Constants.runGrowthModel)
 		N_adj_Amax_phi();
 		
@@ -1466,6 +1466,13 @@ public class Leaf extends Organ {
 		// be developed from the assimilates
 		// partitioned or re-allocated to the leaf pool in the last time
 		// interval
+		double x = Constants.ElapsedThermalDaysSinceGermination;
+	    double SLW=-3.068e-5*x*x + 0.06989*x + 21.91; // the SLW fitted with measured data by Xiurong. (2015)
+	    
+	    if (x>1274){
+	    	SLW = 61;
+	    }
+		
 		switch (Constants.LeafGrowthModelType) {
 		case 0:
 			// Accept the fixed LAI indicated in the canopy parameters section
@@ -1476,9 +1483,9 @@ public class Leaf extends Organ {
 			// Use the assimilates partitioned or reallocated to the leaf pool
 			// and the specific leaf area to calculate
 			// the area of new leaf that can be grown.
-			LA = dry_weight
-					/ Double.valueOf(WIMOVAC.constants
-							.getProperty("SpecificLeafArea")); // calculate the
+			LA = dry_weight/SLW; 
+			//		/ Double.valueOf(WIMOVAC.constants
+			//				.getProperty("SpecificLeafArea")); // calculate the
 																// Leaf Area
 																// with
 																// dry_weight

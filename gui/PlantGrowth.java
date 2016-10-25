@@ -18,9 +18,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 import function.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -42,7 +46,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
     //constructor
     public PlantGrowth() {
         
-        
+          	
         Border loweredbevel=BorderFactory.createLoweredBevelBorder();
         Border raisedbevel=BorderFactory.createRaisedBevelBorder();
         Font f1=new Font("Times New Roman", Font.BOLD, 20);
@@ -54,7 +58,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         
         String title1[]={"Latitude (degree)  ", "Atmospheric [O2] (mmol.mol-1) ", "Atmospheric [CO2] (ppm)",
                          "Year  ",  "Start Day  ", "Finish Day "};
-        double default1[]={52,210,360,2014,100,250};
+        double default1[]={55,210,360,2014,135,218};
         tf1=new LabelTextfieldGroup(6,title1,default1);
         north.add(tf1.createHorizontalLabelTextfieldGroup());
          
@@ -266,7 +270,67 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
  
     
     public void calculation() {
-        
+
+    	PrintWriter pw0 = null;
+		try {
+			pw0 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("FestGrowth_OutputFile_weather_prediction.csv")),true);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	
+    	Constants.use_weather_data = true;
+    	// before calculation the model, we read the weather data from file. 
+    	Weather weather = new Weather(); 
+    	FileInputStream fis = null;
+    	  InputStreamReader isr = null;
+    	  BufferedReader br = null; //用于包装InputStreamReader,提高处理性能。因为BufferedReader有缓冲的，而InputStreamReader没有。
+    	  try {
+    	   String str = "";
+    	   String str1 = "";
+    	   fis = new FileInputStream("E:\\project\\xiurong\\weather2014.txt");// FileInputStream 
+    	   // 从文件系统中的某个文件中获取字节
+    	    isr = new InputStreamReader(fis);// InputStreamReader 是字节流通向字符流的桥梁,
+    	    br = new BufferedReader(isr);// 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象
+    	    int i = 0;
+    	    str = br.readLine(); // the first line is title
+    	   while ((str = br.readLine()) != null) {
+    	    
+    		   System.out.println(str);
+    		   String[] strarray=str.split("\t"); 
+    		   
+    		   double Temperaturei = Double.valueOf(strarray[2]);  // the [0] is month, [1] is hour
+    		   double RHi  = Double.valueOf(strarray[3]);
+    		   double PPFDi = Double.valueOf(strarray[4]);
+    		   System.out.println("Temperaturei:" + Temperaturei);
+    		   System.out.println("Temperaturei:" + Temperaturei);
+    		   weather.PPFD[i] = PPFDi;
+    		   weather.Temperature[i] = Temperaturei;
+    		   weather.RH[i] = RHi;
+
+    		   i = i +1;
+    	    
+    	   }
+    	   // 当读取的一行不为空时,把读到的str的值赋给str1
+    //	   System.out.println(str1);// 打印出str1
+    	  } catch (FileNotFoundException e) {
+    	   System.out.println("can not file the file");
+    	  } catch (IOException e) {
+    	   System.out.println("read file failed");
+    	  } finally {
+    	   try {
+    	     br.close();
+    	     isr.close();
+    	     fis.close();
+    	    // 关闭的时候最好按照先后顺序关闭最后开的先关闭所以先关s,再关n,最后关m
+    	   } catch (IOException e) {
+    	    e.printStackTrace();
+    	   }
+    	  }
+    	 
+    	
+    	// weather data file reading.
+    	
     	//get values from GUI
     	
     	//
@@ -281,7 +345,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         int day_end = (int) dayend;
         System.out.println("**"+day_start+"\t"+day_end);
         Location lct = new Location();
-        lct.Latitude = 51;
+        lct.Latitude = Double.valueOf(tf1.tfHorizontal[0].getText());
         lct.Longitude = 0;
         
         CurrentTime ct = new CurrentTime();
@@ -291,6 +355,11 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         GrowthRes gr = new GrowthRes();
         Environment env = new Environment(ct, lct);
         
+        // apply the GUI input O2 and CO2 conc values. 
+        env.air.O2_concentration = Double.valueOf(tf1.tfHorizontal[1].getText());
+        env.air.CO2_concentration = Double.valueOf(tf1.tfHorizontal[2].getText());
+        
+        
         
         final XYSeriesCollection c1 = new XYSeriesCollection();
         final XYSeriesCollection c2 = new XYSeriesCollection();
@@ -298,14 +367,11 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         final XYSeriesCollection c4 = new XYSeriesCollection();
         final XYSeriesCollection c5 = new XYSeriesCollection();
         final XYSeriesCollection c6 = new XYSeriesCollection();
-        final XYSeriesCollection c7 = new XYSeriesCollection();
-        final XYSeriesCollection c8 = new XYSeriesCollection();
-        final XYSeriesCollection c9 = new XYSeriesCollection();
-        final XYSeriesCollection c10 = new XYSeriesCollection();
+ 
         
         int day_step = 1;
         
-        gr = rgm.all_days_curve(ct, lct, env, day_start, day_end, day_step);
+        gr = rgm.all_days_curve(ct, lct, env, day_start, day_end, day_step, weather,pw0);
 
         // draw figures
 

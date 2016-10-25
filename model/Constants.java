@@ -12,7 +12,7 @@ public class Constants {
 	static public double [] LeafNperArea = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
 	static public double [] LeafSenescenceRate = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	static public int LeafSenescenceModel = 1;
-	
+	static public boolean use_weather_data = false;
 	
 	
 	

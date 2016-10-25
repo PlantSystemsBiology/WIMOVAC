@@ -2,6 +2,7 @@ package model;
 
 import gui.WIMOVAC;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
@@ -50,6 +51,15 @@ public class Plant{
 	public double reabsorbed_from_aged = 0;
     public double[] DegDayEndStageLocal;
         
+
+    public boolean isCutDay = false;  // if true, the plant was cut today. 
+    public int Day_cut1 = 0;  // time of cutting, cut 1. 
+    public int Day_cut2 = 0;
+    public int Day_cut3 = 0;
+    public int Day_cut4 = 0;  // assume only 4 cuts per year. 
+    
+    private int growthDay = 1;
+    
     public double a = 0.2, b_leaf = 0.03, b_stem=0.015, b_root=0.01;
     
 
@@ -79,18 +89,18 @@ public class Plant{
         DegDayEndStageLocal = new double[11];
         
     	Frac_DeadLeafReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadLeafReabsorbed"));
-    	Frac_DeadPodReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadPodReabsorbed"));
-    	 Frac_DeadStemReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStemReabsorbed"));
+    	Frac_DeadPodReabsorbed 	    = (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadPodReabsorbed"));
+    	Frac_DeadStemReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStemReabsorbed"));
     	Frac_DeadSrootReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadSrootReabsorbed"));
-    	 Frac_DeadFrootReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadFrootReabsorbed"));
+    	Frac_DeadFrootReabsorbed 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadFrootReabsorbed"));
     	Frac_DeadStorageReabsorbed = (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStorageReabsorbed"));
     	
     	Frac_DeadLeafGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadLeafGoesSurface"));
-    	 Frac_DeadPodGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadPodGoesSurface"));
+    	Frac_DeadPodGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadPodGoesSurface"));
     	Frac_DeadStemGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStemGoesSurface"));
     	Frac_DeadSrootGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadSrootGoesSurface"));
     	Frac_DeadFrootGoesSurface 	= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadFrootGoesSurface"));
-    	Frac_DeadStorageGoesSurface= (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStorageGoesSurface"));
+    	Frac_DeadStorageGoesSurface = (double)Double.valueOf(WIMOVAC.constants.getProperty("Frac_DeadStorageGoesSurface"));
     	
     	
     	Constants.LeafNperArea[0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafNperArea_stage1"));
@@ -108,6 +118,7 @@ public class Plant{
     	Constants.LeafSenescenceRate[0] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage1"));
     	Constants.LeafSenescenceRate[1] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage2"));
     	Constants.LeafSenescenceRate[2] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage3"));
+    	
     	Constants.LeafSenescenceRate[3] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage4"));
     	Constants.LeafSenescenceRate[4] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage5"));
     	Constants.LeafSenescenceRate[5] = (double)Double.valueOf(WIMOVAC.constants.getProperty("LeafSenescenceRate_stage6"));
@@ -212,26 +223,39 @@ public class Plant{
         
 	}
 
-	public void runDailyPlantProcess (CurrentTime ct, Location lct, Environment env){
+	public void runDailyPlantProcess (CurrentTime ct, Location lct, Environment env, Weather weather, PrintWriter pw0){
 		/*
 		 * a day of the plant, from uptaking CO2, partitioning, to growing biomass
 		 */
 			
-		calDailyCarbonUptake (ct, lct, env);		//daily CO2 uptake of plant canopy
-
-		calGrowthStage(ct);					//determine stage
+	//	calDailyCarbonUptake (ct, lct, env);		//daily CO2 uptake of plant canopy
+		
+		calDailyCarbonUptake (ct, lct, env, weather, pw0);		//daily CO2 uptake of plant canopy
+		System.out.println("DOY: "+ ct.day);
+		System.out.println("calDailyCarbonUptake Finish!  .... "+daily_carbon_uptake);
+		 
+		if (growthDay<=5){  // set the first 5 days stage is 0, which will re-growing after cut. 
+			growthDay += 1;
+			stage_of_development = 0;
+		}else{
+			calGrowthStage(ct);					//determine stage
+			System.out.println("stage: "+stage_of_development);
+		}
+		System.out.println("calGrowthStage       Finish!  .... "+stage_of_development);
+		System.out.println("calDailyCarbonUptake Finish2!  .... "+daily_carbon_uptake);
+		// *** Qingfeng change the aging before partitioning, because the reabsorbed C can be used for partitioning at the same day.  *** //
 		
 //		System.out.println("Stage: "+stage_of_development);
 		
 		
 		//Respiration ... a * daily_carbon_uptake +  b_leaf * leaf.dry_weight + b_stem * stem.dry_weight  +
-		double Rtotal =  b_root * (f_root.dry_weight + s_root.dry_weight); 
+	//	double Rtotal =  b_root * (f_root.dry_weight + s_root.dry_weight); 
 	//	System.out.println("leaf.dry_weight: "  +leaf.dry_weight);
-		if(Rtotal<daily_carbon_uptake){
-			daily_carbon_uptake = daily_carbon_uptake - Rtotal; 
-		}else{
-			daily_carbon_uptake = 0;
-		}
+	//	if(Rtotal<daily_carbon_uptake){
+	//		daily_carbon_uptake = daily_carbon_uptake - Rtotal; 
+	//	}else{
+	//		daily_carbon_uptake = 0;
+	//	}
 		
 		
 		//Qingfeng change the aging before partitioning, because the reabsorbed C can be used for partitioning at the same day.
@@ -241,6 +265,8 @@ public class Plant{
 			calAgeing_leaf_senescence_rate(); // Using leaf senescence rate model
 		}
 		
+		System.out.println("calAgeing            Finish!  .... "+stage_of_development);
+		System.out.println("calDailyCarbonUptake Finish3!  .... "+daily_carbon_uptake);
 		
 		
 		if(stage_of_development>=0){
@@ -268,7 +294,7 @@ public class Plant{
 	}
 	
 	
-	public void calDailyCarbonUptake (CurrentTime ct, Location lct, Environment env){
+	public void calDailyCarbonUptake (CurrentTime ct, Location lct, Environment env, Weather weather, PrintWriter pw0){
 		
 		/*
 		 * total Ac' for a whole day
@@ -284,10 +310,19 @@ public class Plant{
 			ct.hour = h;
 			env.update(ct, lct);  									//set env
 			
-		//	System.out.println("TEST output of environmental avg_T: "+env.air.avg_T);
-		//	System.out.println("TEST output of environmental high_T: "+env.air.min_T);
-		//	System.out.println("TEST output of environmental low_T: "+env.air.max_T);
+			pw0.println(ct.day+","+ct.hour+","+env.air.current_T+","+env.light.direct_PPFD+","+env.light.diffuse_PPFD);  
+
+			// if use weather input data, here re set part of the environment data. 
+			if (Constants.use_weather_data){
+							
+					env.air.current_T = 0.5* ( weather.Temperature[(int)(ct.day * 24 + ct.hour - 0.5)] + weather.Temperature[(int)(ct.day * 24 + ct.hour + 0.5)] );
+					env.light.total_radiation = 0.5 * (weather.PPFD[(int)(ct.day * 24 + ct.hour - 0.5)] + weather.PPFD[(int)(ct.day * 24 + ct.hour + 0.5)] );
+					env.light.direct_PPFD = env.light.total_radiation * 0.7;
+					env.light.diffuse_PPFD = env.light.total_radiation * 0.3; // assume half diret and half diffuse light. 
+					env.air.RH = 0.5* ( weather.RH[(int)(ct.day * 24 + ct.hour - 0.5)] + weather.RH[(int)(ct.day * 24 + ct.hour + 0.5)] );
 			
+			}
+						
 			//	leaf.T = 25; // TEMP
 			leaf.T = env.air.current_T;  									//set leaf T
 			
@@ -305,7 +340,23 @@ public class Plant{
 			canopy.CanopyMicroClimateDriver(env, leaf);  					//calculate canopy micro-climate and use leaf 's Vcmax and Jmax for SunShade
 			canopy.CanopyAssimilationDriver(env);
 			daily_carbon_uptake += canopy.CO2_uptake_rate * interval_h * 3600 * 1e-6; 	//add up 24 times of umol.m-2.h-1 to give a umol.m-2.day-1 and convert to mol.m-2.day-1
-			if (seed.isGerminated)
+			
+			// here Qingfeng assume it is for 25 degree. 
+						double Nleaf = 170; //unit: g/m2
+						if (stage_of_development>=0){
+								Nleaf = Constants.LeafNperArea[stage_of_development];//Constants.LeafNleafarea_Festulolium[Constants.stage_of_development];
+						}
+						double Rd  = 31.355* Nleaf/1000 - 5.088;   // unit: Nleaf is g/m2
+						
+						// Do not need the following two line, because the leaf Rd was calculated in the leaf model based on leaf N. 
+						double daily_respiration_cost = canopy.LAI * Rd * interval_h * 3600 *1e-6;  // canopy respiraiton cost per day. mol.m-2.day-1
+						
+					//	System.out.println("daily respiration cost: "+daily_respiration_cost);
+						
+						daily_carbon_uptake -= daily_respiration_cost;
+						//		if (isCut)
+			
+		//	if (seed.isGerminated)
 				if(env.air.current_T > 10)
 					today_thermal_hours += env.air.current_T * interval_h;  	// unit is: temperature * hour
 						
@@ -360,10 +411,11 @@ public class Plant{
 		if (num_stages>num_stages_maximal){
 			num_stages = num_stages_maximal;
 		}
-		
+		System.out.println("elapsed_thermal_days: "+elapsed_thermal_days);
 		for (int i=0; i<num_stages; i++)
 			if (elapsed_thermal_days <= DegDayEndStageLocal[i]){
 				stage_of_development = i+1;   	//QF set, the first value is the end day of first stage
+				Constants.stage = stage_of_development;
                              //   
 				return; 
 			}
@@ -475,10 +527,11 @@ public class Plant{
 		// this method is used for calculating leaf senescence dry weight
 		if(stage_of_development>=0){
 			double lsr = Constants.LeafSenescenceRate[stage_of_development];
-		
+		System.out.println("LSR: "+lsr);
 			leaf.dead_on_ground_surface += leaf.dry_weight * lsr;  //add-up everyday dead leaf on ground
+			leaf.dry_weight -= leaf.dry_weight * lsr; 
 		}
-		// do not delete leaf dry weight, as dead leaf also inlcuded in the dry weight. 
+		// delete leaf dry weight. 
 	
 	}
 	
@@ -565,6 +618,10 @@ public class Plant{
 	        if(leaf.dry_weight == 0 && canopy.LAI < 0.001){
 	        	Cgain = 0; // if there is no leaf, but canopy leaf area index is not zero, set CO2 uptake = 0;
 			}
+	        System.out.println("daily carbon uptake 2: "+daily_carbon_uptake);
+	        
+	        System.out.println("Cgain: "+Cgain);
+	        
 		    switch ((int)(double)Double.valueOf(Constants.PartitioningModelSwitch)) {  //=2
 		        case 0:
 		            // Do not allocate assimilated C to any plant structure
@@ -590,6 +647,7 @@ public class Plant{
 		             reallocate sink material to growth Cgain in the appropriate proportions
 		             * 
 		            */
+		        	sink_source = 0; // reset.
 		            for (int n=0; n<7; n++){
 		            	if (Constants.RelPartition[stage_of_development][n] < 0 ){
 		            		double k = Constants.RelPartition[stage_of_development][n];
@@ -647,10 +705,15 @@ public class Plant{
 		           double NUptake = f_root.dry_weight * Constants.k_N_uptakeCapcity;     // The NuptakeCapacity needs to be defined
 		           
 		           double totalN  = NUptake + nitrogen_sink_source;
+		        
 		           Cgain 	+= sink_source; // Add any dry matter coming from the sinks (reallocation) to any photosynthates
+		        
 		           Cgain 	-= NUptake * Constants.k_GlucosePerNitrogen;             // GlucosePerNitrogen needs to be defined
+		        
 		           Cgain   	+= reabsorbed_from_aged;
 
+		           System.out.println("Cgain 2: "+Cgain);
+		           
 		     //      System.out.println("Cgain: \t"+Cgain+"\ttotalN: \t"+totalN);
 		           // Here we need to develop another section to include the potential changes in the partitioning due to the
 		           // demand of nitrogen.   For easy of code development, I will first assume that the fine root carried the function

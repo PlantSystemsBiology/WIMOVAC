@@ -4,6 +4,7 @@ import gui.WIMOVAC;
 
 public class Light {
 	public double direct_PPFD, diffuse_PPFD, scatter_PPFD; //direct: from solar, diffuse: atmospheric diffuse light, scatter: leaf scattered light. 
+	public double total_radiation;
 
 	public Light(){
 

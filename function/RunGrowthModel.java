@@ -1,5 +1,7 @@
 package function;
 
+import java.io.PrintWriter;
+
 import org.jfree.data.xy.XYSeries;
 
 import model.*;
@@ -7,7 +9,7 @@ import model.*;
 
 public class RunGrowthModel {
 	
-	public GrowthRes all_days_curve (CurrentTime ct, Location lct, Environment env, int day_start, int day_end, int day_step){
+	public GrowthRes all_days_curve (CurrentTime ct, Location lct, Environment env, int day_start, int day_end, int day_step, Weather weather, PrintWriter pw0){
 		
 		/*
 		 * all_day_curve:
@@ -25,7 +27,7 @@ public class RunGrowthModel {
 		
 		for (int d = day_start; d<=day_end; d+=day_step) {
         	ct.day = d;
-        	plant.runDailyPlantProcess(ct, lct, env);
+        	plant.runDailyPlantProcess(ct, lct, env, weather, pw0);
         	
         	// Tab 1  
         	gr.xys_NetAssiRate.add(d, plant.daily_carbon_uptake);   // mol CO2/m2/day
