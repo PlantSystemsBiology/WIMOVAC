@@ -288,7 +288,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
     	  try {
     	   String str = "";
     	   String str1 = "";
-    	   fis = new FileInputStream("E:\\project\\xiurong\\weather2014.txt");// FileInputStream 
+    	   fis = new FileInputStream("E:\\project\\xiurong\\weather2012.txt");// FileInputStream 
     	   // 从文件系统中的某个文件中获取字节
     	    isr = new InputStreamReader(fis);// InputStreamReader 是字节流通向字符流的桥梁,
     	    br = new BufferedReader(isr);// 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象
@@ -296,14 +296,14 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
     	    str = br.readLine(); // the first line is title
     	   while ((str = br.readLine()) != null) {
     	    
-    		   System.out.println(str);
+//    		   System.out.println(str);
     		   String[] strarray=str.split("\t"); 
     		   
     		   double Temperaturei = Double.valueOf(strarray[2]);  // the [0] is month, [1] is hour
     		   double RHi  = Double.valueOf(strarray[3]);
     		   double PPFDi = Double.valueOf(strarray[4]);
-    		   System.out.println("Temperaturei:" + Temperaturei);
-    		   System.out.println("Temperaturei:" + Temperaturei);
+ //   		   System.out.println("Temperaturei:" + Temperaturei);
+ //   		   System.out.println("Temperaturei:" + Temperaturei);
     		   weather.PPFD[i] = PPFDi;
     		   weather.Temperature[i] = Temperaturei;
     		   weather.RH[i] = RHi;
@@ -343,7 +343,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
         int day_start = (int) daystart;
         double dayend = Double.valueOf(tf1.tfHorizontal[5].getText()); 
         int day_end = (int) dayend;
-        System.out.println("**"+day_start+"\t"+day_end);
+//        System.out.println("**"+day_start+"\t"+day_end);
         Location lct = new Location();
         lct.Latitude = Double.valueOf(tf1.tfHorizontal[0].getText());
         lct.Longitude = 0;

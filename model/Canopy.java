@@ -45,7 +45,7 @@ public class Canopy extends CanopyProperties{
 		
 		cond 			= (sunlit_leaf.cond * sunlit_leaf.LAI + shaded_leaf.cond * shaded_leaf.LAI)/(sunlit_leaf.LAI + shaded_leaf.LAI);
 	    CO2_uptake_rate = sunlit_leaf.CO2_uptake_rate 	+ shaded_leaf.CO2_uptake_rate;
-	    System.out.println("A_sunlit: "+sunlit_leaf.CO2_uptake_rate+ "  A_shaded: "+shaded_leaf.CO2_uptake_rate);
+//	    System.out.println("A_sunlit: "+sunlit_leaf.CO2_uptake_rate+ "  A_shaded: "+shaded_leaf.CO2_uptake_rate);
 
 
 	    // transpiration part // 
@@ -165,8 +165,8 @@ public class Canopy extends CanopyProperties{
 	    shaded_leaf.PPFD 	= ShadedLeafPhotonFlux;
 	    scatter_light_temp 	= ScatteredPhotonFlux;  
 	    
-	    System.out.println("sunlit light: "+sunlit_leaf.PPFD +" LAI: "+sunlit_leaf.LAI);
-	    System.out.println("shaded light: "+shaded_leaf.PPFD +" LAI: "+shaded_leaf.LAI);
+//	    System.out.println("sunlit light: "+sunlit_leaf.PPFD +" LAI: "+sunlit_leaf.LAI);
+//	    System.out.println("shaded light: "+shaded_leaf.PPFD +" LAI: "+shaded_leaf.LAI);
 	    
 	    
 	    }

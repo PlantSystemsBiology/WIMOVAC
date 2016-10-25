@@ -1455,7 +1455,7 @@ public class Leaf extends Organ {
 		// be developed from the assimilates
 		// partitioned or re-allocated to the leaf pool in the last time
 		// interval
-		double x = Constants.ElapsedThermalDaysSinceGermination;
+		double x = Constants.elapsed_thermal_days;
 	    double SLW=-3.068e-5*x*x + 0.06989*x + 21.91; // the SLW fitted with measured data by Xiurong. (2015)
 	    
 	    if (x>1274){

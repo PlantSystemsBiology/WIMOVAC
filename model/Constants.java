@@ -18,7 +18,7 @@ public class Constants {
 	static public int LeafSenescenceModel = 1;
 	static public boolean use_weather_data = false;
 	static public boolean growthFromSeed = false;
-	
+	static public double elapsed_thermal_days=0;
 	
 	
 //	static public double Frac_DeadLeafReabsorbed 	= 0.3;
@@ -91,8 +91,8 @@ public class Constants {
         static public double RelativeHumidity;
         static public double VapourPressureDefecit;
     
-        static public double ElapsedThermalTimeSinceGermination;
-        static public double ElapsedThermalDaysSinceGermination;
+//        static public double ElapsedThermalTimeSinceGermination;
+//        static public double ElapsedThermalDaysSinceGermination;
 
         static public double TimeCorrectionFactor;
         static public double DayCumPhotonFlux;

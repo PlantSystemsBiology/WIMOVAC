@@ -17,15 +17,15 @@ public class Plant{
 	public StorageOrgan storage_organ = new StorageOrgan();
 	public Canopy canopy    = new Canopy();
 	
-	public double elapsed_thermal_days  	= 0;     // elapsed_thermal_days: thermal time used for determining growth stage
+//	public double elapsed_thermal_days  	= 0;     // elapsed_thermal_days: thermal time used for determining growth stage
 	ArrayList<Double> thermal_days_for_aging = new ArrayList<Double>(); // a list for store thermal hours data for every day
 	double today_thermal_hours = 0;
-	public double above_ground_dry_weight 	= 0;
-	public double below_ground_dry_weight 	= 0;
-	public double above_ground_stand_dead 	= 0;
-	public double above_ground_surface_dead = 0;
-	public double below_ground_stand_dead 	= 0;
-	public double below_ground_surface_dead = 0;
+//	public double above_ground_dry_weight 	= 0;
+//	public double below_ground_dry_weight 	= 0;
+//	public double above_ground_stand_dead 	= 0;
+//	public double above_ground_surface_dead = 0;
+//	public double below_ground_stand_dead 	= 0;
+//	public double below_ground_surface_dead = 0;
 	
 	public double Frac_DeadLeafReabsorbed 	= 0.3;
 	public double Frac_DeadPodReabsorbed 	= 0.5;
@@ -82,7 +82,7 @@ public class Plant{
   		seed			.calTotalConvEff();
   		storage_organ	.calTotalConvEff();
   		
-  		elapsed_thermal_days = 0;
+  		Constants.elapsed_thermal_days = 0;
   		
 		leaf.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_leaf"));
 		stem.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_stem"));
@@ -94,6 +94,7 @@ public class Plant{
 		
 		storage_organ.dry_weight = (double)Double.valueOf(WIMOVAC.constants.getProperty("Init_DW_storage_organ"));
 		
+		leaf.dead_on_ground_surface = 0;
 		
 		canopy.LAI = 0.0001;
 		canopy.shaded_leaf.LAI = 0.0001;
@@ -262,8 +263,8 @@ public class Plant{
 		// part 2 //
 		calRespiration();
 		
-		System.out.println("DOY: "+ ct.day);
-		System.out.println("calDailyCarbonUptake Finish!  .... "+daily_carbon_uptake);
+//		System.out.println("DOY: "+ ct.day);
+//		System.out.println("calDailyCarbonUptake Finish!  .... "+daily_carbon_uptake);
 		
 		
 		
@@ -280,10 +281,10 @@ public class Plant{
 			calGrowthStage(ct);					//determine stage
 		}
 		
-		System.out.println("stage: "+Constants.stage);
+//		System.out.println("stage: "+Constants.stage);
 		
-		System.out.println("calGrowthStage       Finish!  .... "+Constants.stage);
-		System.out.println("calDailyCarbonUptake Finish2!  .... "+daily_carbon_uptake);
+//		System.out.println("calGrowthStage       Finish!  .... "+Constants.stage);
+//		System.out.println("calDailyCarbonUptake Finish2!  .... "+daily_carbon_uptake);
 		// *** Qingfeng change the aging before partitioning, because the reabsorbed C can be used for partitioning at the same day.  *** //
 
 		
@@ -295,8 +296,8 @@ public class Plant{
 			calAgeing_leaf_senescence_rate(); // Using leaf senescence rate model
 		}
 		
-		System.out.println("calAgeing            Finish!  .... "+Constants.stage);
-		System.out.println("calDailyCarbonUptake Finish3!  .... "+daily_carbon_uptake);
+//		System.out.println("calAgeing            Finish!  .... "+Constants.stage);
+//		System.out.println("calDailyCarbonUptake Finish3!  .... "+daily_carbon_uptake);
 		
 		
 		
@@ -394,14 +395,14 @@ public class Plant{
 
 			double Rd  = 31.355* Nleaf/1000 - 5.088;   // unit: Nleaf is g/m2
 					
-			Rd = 1;
+		//	Rd = 0.4;
 		//	System.out.println("Rd: "+Rd);
 			
 			double daily_respiration_cost = canopy.LAI * Rd * interval_h * 3600 *1e-6;  // canopy respiraiton cost per hour
 					
 			today_respiration += daily_respiration_cost;
 		}
-		System.out.println("today Rc: "+today_respiration);
+	//	System.out.println("today Rc: "+today_respiration);
 		daily_carbon_uptake -= today_respiration;
 
 	}
@@ -454,11 +455,11 @@ public class Plant{
 			// System.out.println("elapsed_thermal_days: "+elapsed_thermal_days);
 
 			// update elapsed thermal days, by add up today thermal value.
-			elapsed_thermal_days +=  today_thermal_hours / 24;          		// unit is: temperature * day
+			Constants.elapsed_thermal_days +=  today_thermal_hours / 24;          		// unit is: temperature * day
 			
 			// determine stage by DegDayEndStages. 
 			for (int i=0; i<num_stages; i++){
-				if (elapsed_thermal_days <= Constants.DegDayEndStages[i]){
+				if (Constants.elapsed_thermal_days <= Constants.DegDayEndStages[i]){
 					Constants.stage = i;   	//QF set, the first value is the end day of first stage
 					return; 
 				}
@@ -590,9 +591,9 @@ public class Plant{
 						// zero, set CO2 uptake = 0;
 		}
 
-		System.out.println("daily carbon uptake 2: " + daily_carbon_uptake);
+//		System.out.println("daily carbon uptake 2: " + daily_carbon_uptake);
 
-		System.out.println("Cgain: " + Cgain);
+//		System.out.println("Cgain: " + Cgain);
 
 		/*
 		 * Allocate Cgain to plant structures on the basis of the partitioning
@@ -695,7 +696,7 @@ public class Plant{
 		// N uptake + reallocated N.
 		double totalN = NUptake + nitrogen_sink_source;
 
-		System.out.println("Cgain 2: " + Cgain);
+//		System.out.println("Cgain 2: " + Cgain);
 
 		// calculate the total nitrogen demand
 		total_nitrogen_demand = leaf.partition_weight * leaf.total_conv_eff

@@ -58,8 +58,8 @@ public class RunGrowthModel {
         	gr.xys_DayHighTemp 				.add(d,env.air.max_T);
         	gr.xys_DayLowTemp 				.add(d,env.air.min_T);
         	
-        	gr.xys_ElapsedThermalTime_day 				.add(d,plant.elapsed_thermal_days);
-        	gr.xys_ElapsedThermalTime_hour 				.add(d,plant.elapsed_thermal_days*24);
+        	gr.xys_ElapsedThermalTime_day 				.add(d,Constants.elapsed_thermal_days);
+        	gr.xys_ElapsedThermalTime_hour 				.add(d,Constants.elapsed_thermal_days*24);
         	gr.xys_RelativeHumidity 				.add(d,env.air.RH);
         	gr.xys_OzoneConcentration 				.add(d,env.air.O3);
         	gr.xys_DirectSunLight 				.add(d,env.light.direct_PPFD);
@@ -75,8 +75,8 @@ public class RunGrowthModel {
         	// Tab 3.1
         	gr.xys_leaf_dry_weight.add(d, plant.leaf.dry_weight);
         	gr.xys_stem_dry_weight.add(d, plant.stem.dry_weight);
-        	gr.xys_standing_dead.add(d,plant.above_ground_stand_dead);  // ...
-        	gr.xys_surface_dead.add(d,plant.above_ground_stand_dead);  // ...
+        	gr.xys_standing_dead.add(d,plant.leaf.dead_on_stand);  // ...
+        	gr.xys_surface_dead.add(d,plant.leaf.dead_on_ground_surface);  // ...
         	gr.xys_seed_dry_weight.add(d,plant.seed.dry_weight);
         	gr.xys_pod_dry_weight.add(d,plant.pod.dry_weight);
         	
