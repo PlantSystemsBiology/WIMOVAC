@@ -16,9 +16,12 @@ import java.io.*;
 import java.util.Properties;
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import model.Constants;
  
 public class WIMOVAC extends JPanel implements ActionListener {
 	
@@ -97,7 +100,15 @@ public class WIMOVAC extends JPanel implements ActionListener {
         TitledBorder titledborder4 = BorderFactory.createTitledBorder(loweredbevel,"Parameters File");
         south2.setBorder(titledborder4);
         
-
+        JPanel south3=new JPanel();
+        TitledBorder titledborder5 = BorderFactory.createTitledBorder(loweredbevel,"Weather File");
+        south3.setBorder(titledborder5);
+        
+        JButton load=new JButton("   Load   ");
+        load.setFont(f3);
+        load.setBorder(raisedbevel);
+        load.addActionListener(this);
+        
         JButton open=new JButton("   Open   ");
         open.setFont(f3);
         open.setBorder(raisedbevel);
@@ -116,6 +127,8 @@ public class WIMOVAC extends JPanel implements ActionListener {
         south2.add(open);
         south2.add(save);
         south2.add(saveAs);
+        
+        south3.add(load);
         
 
         ButtonGroup b = new ButtonGroup();
@@ -143,6 +156,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
                     .addComponent(center)
                     .addComponent(south)  
                     .addComponent(south2)
+                    .addComponent(south3)
                     
                 	)
                 .addComponent(start)
@@ -158,6 +172,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
                  .addComponent(center)
                  .addComponent(south)
                  .addComponent(south2)
+                 .addComponent(south3)
             	)
                .addComponent(start)
             	);        
@@ -180,7 +195,7 @@ public class WIMOVAC extends JPanel implements ActionListener {
         //Display the window
         frame.pack();
         frame.setLocationRelativeTo(null); //center it
-        frame.setSize(480,500);
+        frame.setSize(480,550);
         frame.setVisible(true);
     }
 
@@ -206,6 +221,51 @@ public class WIMOVAC extends JPanel implements ActionListener {
                plantgrowth.createAndShowGUI();
            } 
     	}
+    	if (text.equals("   Load   ")){
+
+      	   //QF 2016-10-13
+      	   
+      	   //OPEN to a user choose file. 
+     		JFileChooser fc2;
+     		if(WorkingDirOpened){
+  	    		fc2 = new JFileChooser(OpenedWorkingDir);
+     		}else{
+     			String current="";
+ 				try {
+ 					current = new File( "." ).getCanonicalPath();
+ 				} catch (IOException e1) {
+ 					// TODO Auto-generated catch block
+ 					e1.printStackTrace();
+ 					fc2 = new JFileChooser();
+ 				}
+     			fc2 = new JFileChooser(current);
+     		}
+      	   
+      	   
+      	   FileNameExtensionFilter filter2 = new FileNameExtensionFilter(
+      		        ".txt", "txt");
+      	   fc2.setFileFilter(filter2);
+      	   int returnVal2 = fc2.showOpenDialog(getParent());
+      	   if(returnVal2 == JFileChooser.APPROVE_OPTION) {
+      	       System.out.println("You chose to load weather file: " +
+      	            fc2.getSelectedFile().getAbsoluteFile());
+      	       
+      	       String Absolutefilename = fc2.getSelectedFile().getAbsolutePath();
+      	       Constants.weatherFile = Absolutefilename;
+      	       Constants.weatherFileOpened = true;
+      	      
+      	      // save current working directory
+      	      OpenedWorkingDir = fc2.getSelectedFile().getParent();
+      	      WorkingDirOpened = true;
+      	        
+      	    }
+      	  
+      	 
+      	 //QF
+     		
+     	}
+    	
+    	
     	if (text.equals("   Open   ")){
 
      	   //QF 2016-10-13

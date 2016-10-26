@@ -288,7 +288,11 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
     	  try {
     	   String str = "";
     	   String str1 = "";
-    	   fis = new FileInputStream("E:\\project\\xiurong\\weather2012.txt");// FileInputStream 
+    	   if (Constants.weatherFileOpened){
+    		   fis = new FileInputStream(Constants.weatherFile);// FileInputStream 
+    	   }else{
+    		   JOptionPane.showMessageDialog(null, "Weather file not loaded! \n You Can load a weather file from WIMVOAC");
+    	   }
     	   // 从文件系统中的某个文件中获取字节
     	    isr = new InputStreamReader(fis);// InputStreamReader 是字节流通向字符流的桥梁,
     	    br = new BufferedReader(isr);// 从字符输入流中读取文件中的内容,封装了一个new InputStreamReader的对象

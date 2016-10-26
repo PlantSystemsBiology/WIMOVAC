@@ -20,6 +20,8 @@ public class Constants {
 	static public boolean growthFromSeed = false;
 	static public double elapsed_thermal_days=0;
 	
+	static public String weatherFile;
+	static public boolean weatherFileOpened = false;
 	
 //	static public double Frac_DeadLeafReabsorbed 	= 0.3;
 //	static public double Frac_DeadPodReabsorbed 	= 0.5;
