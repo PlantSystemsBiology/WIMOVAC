@@ -273,7 +273,7 @@ public class PlantGrowth extends JPanel implements ActionListener, ItemListener 
 
     	PrintWriter pw0 = null;
 		try {
-			pw0 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("FestGrowth_OutputFile_weather_prediction.csv")),true);
+			pw0 = new PrintWriter(new OutputStreamWriter(new FileOutputStream("temp/FestGrowth_OutputFile_weather_prediction.csv")),true);
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
